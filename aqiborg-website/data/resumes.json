@@ -1,0 +1,30 @@
+{
+    "software-engineer": {
+        "title": "Aqib - Software Engineer",
+        "summary": "Experienced full-stack software engineer specializing in web development, cloud architecture, and scalable applications. Passionate about creating innovative solutions that drive business growth.",
+        "experience": [
+            "Senior Software Engineer at TechCorp (2020 - Present): Architected and deployed microservices platform serving 1M+ users daily using Node.js, React, and AWS.",
+            "Full Stack Developer at Innovate Solutions (2018 - 2020): Developed responsive web applications with modern JavaScript frameworks and Python/Django backends.",
+            "Software Engineer at DigitalWorks (2016 - 2018): Built RESTful APIs, optimized database queries, and implemented CI/CD pipelines."
+        ],
+        "skills": [
+            "JavaScript (ES6+)",
+            "React & Next.js",
+            "Node.js & Express",
+            "Python & Django",
+            "PostgreSQL & MongoDB",
+            "AWS & Docker",
+            "Git & CI/CD",
+            "TypeScript"
+        ],
+        "education": [
+            "B.S. Computer Science, University of Technology (2012 - 2016)",
+            "AWS Certified Solutions Architect (2021)"
+        ],
+        "contact": {
+            "email": "hello@aqib.org",
+            "linkedin": "linkedin.com/in/aqiborg",
+            "github": "github.com/aqiborg"
+        }
+    }
+}
