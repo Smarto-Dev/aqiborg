@@ -1,35 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aqib.org - Professional Resume</title>
+    <meta name="description" content="Aqib's Professional Resume">
+    <title>Aqib | Software Engineer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div id="login-container" class="container">
-        <h1>Welcome to Aqib.org</h1>
-        <p>Your dynamic professional resume</p>
-        <form id="login-form">
-            <input type="password" id="password" placeholder="Enter access code" required>
-            <button type="submit">Login</button>
-        </form>
-        <p id="login-error" class="error hidden"></p>
-    </div>
+    <nav id="top-nav" class="no-print">
+        <div class="nav-inner">
+            <div class="nav-left">
+                <span class="nav-brand">aqib.org</span>
+                <span class="nav-sep">·</span>
+                <span class="nav-hint">Viewing as</span>
+                <div id="role-pills"></div>
+            </div>
+            <div class="nav-right">
+                <button id="dark-toggle" title="Toggle dark mode">&#9680;</button>
+                <button id="print-btn" onclick="window.print()">&#8595; Download CV</button>
+            </div>
+        </div>
+    </nav>
 
-    <div id="resume-container" class="container hidden">
-        <header>
-            <h1>Aqib</h1>
-            <select id="profession-switcher">
-                <option value="software-engineer">Software Engineer</option>
-                <!-- More options added dynamically from JSON -->
-            </select>
-            <button id="logout">Logout</button>
+    <div id="app">
+        <header id="hero">
+            <div class="hero-inner">
+                <div class="hero-badge" id="hero-role-badge"></div>
+                <h1 id="hero-name">Aqib</h1>
+                <p id="hero-title" class="hero-title"></p>
+                <p id="hero-tagline" class="hero-tagline"></p>
+                <div id="hero-links" class="hero-links"></div>
+            </div>
+            <div class="hero-pattern"></div>
         </header>
 
-        <section id="resume-content">
-            <!-- Dynamic resume content loaded here -->
-        </section>
+        <div id="stats-row">
+            <div id="stats-grid" class="stats-grid"></div>
+        </div>
+
+        <div id="layout">
+            <aside id="sidebar">
+                <div id="skills-card" class="card fade-in">
+                    <h2 class="card-title">Skills</h2>
+                    <div id="skills-content"></div>
+                </div>
+                <div id="education-card" class="card fade-in">
+                    <h2 class="card-title">Education</h2>
+                    <div id="education-content"></div>
+                </div>
+                <div id="contact-card" class="card fade-in no-print">
+                    <h2 class="card-title">Contact</h2>
+                    <div id="contact-content"></div>
+                </div>
+            </aside>
+
+            <main id="main">
+                <div id="summary-card" class="card fade-in">
+                    <h2 class="card-title">About</h2>
+                    <p id="summary-content"></p>
+                </div>
+                <div id="experience-card" class="card fade-in">
+                    <h2 class="card-title">Experience</h2>
+                    <div id="experience-content" class="timeline"></div>
+                </div>
+                <div id="projects-card" class="card fade-in">
+                    <h2 class="card-title">Projects</h2>
+                    <div id="projects-content" class="projects-grid"></div>
+                </div>
+            </main>
+        </div>
     </div>
 
     <script src="js/script.js"></script>

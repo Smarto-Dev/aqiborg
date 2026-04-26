@@ -1,159 +1,254 @@
 class ResumeApp {
     constructor() {
-        this.accessCode = 'aqib123'; // Simple hardcoded password, change later
         this.resumes = {};
-        this.currentProfession = 'software-engineer';
+        this.currentRole = null;
+        this.typewriterTimer = null;
         this.init();
     }
 
-    init() {
-        this.bindEvents();
-        this.loadResumes();
-        this.checkLoginStatus();
-    }
-
-    bindEvents() {
-        const loginForm = document.getElementById('login-form');
-        const professionSwitcher = document.getElementById('profession-switcher');
-        const logoutBtn = document.getElementById('logout');
-
-        loginForm.addEventListener('submit', (e) => this.handleLogin(e));
-        professionSwitcher.addEventListener('change', (e) => this.switchProfession(e.target.value));
-        logoutBtn.addEventListener('click', () => this.logout());
+    async init() {
+        await this.loadResumes();
+        this.setupDarkMode();
+        this.setupScrollAnimations();
+        this.loadFromHash();
+        window.addEventListener('hashchange', () => this.loadFromHash());
     }
 
     async loadResumes() {
         try {
-            const response = await fetch('../data/resumes.json');
-            this.resumes = await response.json();
-            this.populateProfessionSwitcher();
-        } catch (error) {
-            console.error('Failed to load resumes:', error);
-            // Fallback data
-            this.resumes = {
-                'software-engineer': this.getDefaultResume()
-            };
-            this.populateProfessionSwitcher();
+            const res = await fetch('data/resumes.json');
+            this.resumes = await res.json();
+        } catch (e) {
+            console.error('Could not load resumes.json', e);
         }
+        this.renderRolePills();
     }
 
-    populateProfessionSwitcher() {
-        const select = document.getElementById('profession-switcher');
-        select.innerHTML = '';
-        Object.keys(this.resumes).forEach(profession => {
-            const option = document.createElement('option');
-            option.value = profession;
-            option.textContent = this.resumes[profession].title;
-            select.appendChild(option);
+    loadFromHash() {
+        const hash = window.location.hash.slice(1);
+        const roles = Object.keys(this.resumes);
+        if (!roles.length) return;
+        const role = roles.includes(hash) ? hash : roles[0];
+        this.switchRole(role);
+    }
+
+    renderRolePills() {
+        const container = document.getElementById('role-pills');
+        container.innerHTML = '';
+        Object.entries(this.resumes).forEach(([key, data]) => {
+            const btn = document.createElement('button');
+            btn.className = 'role-pill';
+            btn.textContent = data.title;
+            btn.dataset.role = key;
+            btn.addEventListener('click', () => { window.location.hash = key; });
+            container.appendChild(btn);
         });
     }
 
-    getDefaultResume() {
-        return {
-            title: 'Software Engineer',
-            summary: 'Full-stack developer with expertise in modern web technologies, passionate about building scalable applications.',
-            experience: [
-                'Senior Software Engineer at TechCorp (2020-Present): Led development of microservices architecture using Node.js and React.',
-                'Software Developer at Innovate Inc (2018-2020): Built responsive web apps with HTML/CSS/JS and Python backends.',
-                'Junior Developer at StartUpX (2016-2018): Contributed to mobile-first designs and database optimization.'
-            ],
-            skills: ['JavaScript (ES6+)', 'React', 'Node.js', 'Python', 'SQL', 'Git', 'Docker', 'AWS'],
-            education: [
-                'B.S. Computer Science, University of Excellence (2012-2016)'
-            ],
-            contact: {
-                email: 'aqib@aqib.org',
-                linkedin: 'linkedin.com/in/aqib',
-                github: 'github.com/aqiborg'
+    switchRole(role) {
+        if (role === this.currentRole) return;
+        this.currentRole = role;
+
+        document.querySelectorAll('.role-pill').forEach(p => {
+            p.classList.toggle('active', p.dataset.role === role);
+        });
+
+        const fadeEls = [document.getElementById('layout'), document.getElementById('stats-row')];
+
+        fadeEls.forEach(el => { if (el) el.style.opacity = '0'; });
+
+        setTimeout(() => {
+            this.renderResume(this.resumes[role]);
+            fadeEls.forEach(el => { if (el) el.style.opacity = '1'; });
+            setTimeout(() => this.triggerVisibleAnimations(), 60);
+        }, 180);
+    }
+
+    renderResume(data) {
+        if (!data) return;
+
+        document.title = `Aqib | ${data.title}`;
+
+        document.getElementById('hero-role-badge').textContent = data.title;
+        document.getElementById('hero-tagline').textContent = data.tagline || '';
+        this.typewrite(document.getElementById('hero-title'), data.subtitle || data.title);
+        this.renderHeroLinks(data.contact);
+        this.renderStats(data.stats || []);
+        this.renderSkills(data.skills || {});
+        this.renderEducation(data.education || []);
+        this.renderContact(data.contact || {});
+        document.getElementById('summary-content').textContent = data.summary || '';
+        this.renderExperience(data.experience || []);
+        this.renderProjects(data.projects || []);
+    }
+
+    renderHeroLinks(contact) {
+        if (!contact) return;
+        const container = document.getElementById('hero-links');
+        const links = [
+            contact.email   && { href: `mailto:${contact.email}`,                     text: `&#x2709; ${contact.email}` },
+            contact.github  && { href: `https://${contact.github}`,  blank: true,     text: '&#x2316; GitHub' },
+            contact.linkedin && { href: `https://${contact.linkedin}`, blank: true,   text: '&#x2606; LinkedIn' },
+        ].filter(Boolean);
+
+        container.innerHTML = links.map(l =>
+            `<a href="${l.href}" class="hero-link"${l.blank ? ' target="_blank" rel="noopener noreferrer"' : ''}>${l.text}</a>`
+        ).join('');
+    }
+
+    renderStats(stats) {
+        const grid = document.getElementById('stats-grid');
+        grid.innerHTML = stats.map(s => `
+            <div class="stat-item">
+                ${s.icon ? `<span class="stat-icon">${s.icon}</span>` : ''}
+                <span class="stat-value" data-target="${s.value}">${s.value}</span>
+                <span class="stat-label">${s.label}</span>
+            </div>
+        `).join('');
+        this.animateCounters();
+    }
+
+    animateCounters() {
+        document.querySelectorAll('.stat-value').forEach(el => {
+            const raw = el.dataset.target;
+            const num = parseInt(raw);
+            if (isNaN(num)) return;
+            const suffix = raw.replace(/[0-9]/g, '');
+            let current = 0;
+            const duration = 1000;
+            const interval = 16;
+            const step = num / (duration / interval);
+            const timer = setInterval(() => {
+                current = Math.min(current + step, num);
+                el.textContent = Math.floor(current) + suffix;
+                if (current >= num) clearInterval(timer);
+            }, interval);
+        });
+    }
+
+    renderSkills(skills) {
+        const container = document.getElementById('skills-content');
+        if (Array.isArray(skills)) {
+            container.innerHTML = `<div class="skill-tags">${skills.map(s => `<span class="skill-tag">${s}</span>`).join('')}</div>`;
+        } else {
+            container.innerHTML = Object.entries(skills).map(([group, tags]) => `
+                <div class="skill-group">
+                    <div class="skill-group-name">${group}</div>
+                    <div class="skill-tags">${tags.map(t => `<span class="skill-tag">${t}</span>`).join('')}</div>
+                </div>
+            `).join('');
+        }
+    }
+
+    renderEducation(education) {
+        const container = document.getElementById('education-content');
+        container.innerHTML = education.map(edu => {
+            if (typeof edu === 'string') return `<div class="edu-item"><div class="edu-degree">${edu}</div></div>`;
+            return `
+                <div class="edu-item">
+                    <div class="edu-degree">${edu.degree}</div>
+                    ${edu.school  ? `<div class="edu-school">${edu.school}</div>` : ''}
+                    ${edu.period  ? `<div class="edu-period">${edu.period}</div>` : ''}
+                    ${edu.detail  ? `<div class="edu-detail">${edu.detail}</div>` : ''}
+                </div>
+            `;
+        }).join('');
+    }
+
+    renderContact(contact) {
+        const container = document.getElementById('contact-content');
+        const items = [
+            contact.email    && { icon: '✉', href: `mailto:${contact.email}`,             text: contact.email },
+            contact.location && { icon: '📍', text: contact.location },
+            contact.github   && { icon: '⌥', href: `https://${contact.github}`,  ext: true, text: contact.github },
+            contact.linkedin && { icon: '⚭', href: `https://${contact.linkedin}`, ext: true, text: contact.linkedin },
+        ].filter(Boolean);
+
+        container.innerHTML = items.map(item =>
+            item.href
+                ? `<a href="${item.href}" class="contact-item"${item.ext ? ' target="_blank" rel="noopener noreferrer"' : ''}>
+                     <span class="contact-icon">${item.icon}</span>${item.text}
+                   </a>`
+                : `<div class="contact-item"><span class="contact-icon">${item.icon}</span>${item.text}</div>`
+        ).join('');
+    }
+
+    renderExperience(experience) {
+        const container = document.getElementById('experience-content');
+        container.innerHTML = experience.map(exp => {
+            if (typeof exp === 'string') {
+                return `<div class="timeline-item"><div class="timeline-role">${exp}</div></div>`;
+            }
+            return `
+                <div class="timeline-item">
+                    <div class="timeline-header">
+                        <span class="timeline-role">${exp.role}</span>
+                        ${exp.period ? `<span class="timeline-period">${exp.period}</span>` : ''}
+                    </div>
+                    ${exp.company ? `<div class="timeline-company">${exp.company}${exp.location ? ' &middot; ' + exp.location : ''}</div>` : ''}
+                    ${Array.isArray(exp.highlights) ? `
+                        <ul class="timeline-highlights">
+                            ${exp.highlights.map(h => `<li>${h}</li>`).join('')}
+                        </ul>` : ''}
+                </div>
+            `;
+        }).join('');
+    }
+
+    renderProjects(projects) {
+        const card = document.getElementById('projects-card');
+        if (!projects || !projects.length) { card.style.display = 'none'; return; }
+        card.style.display = '';
+        document.getElementById('projects-content').innerHTML = projects.map(p => `
+            <div class="project-card${p.highlight ? ' featured' : ''}">
+                <div class="project-name">${p.name}</div>
+                <div class="project-desc">${p.description}</div>
+                ${p.tech ? `<div class="project-tech">${p.tech.map(t => `<span class="tech-tag">${t}</span>`).join('')}</div>` : ''}
+            </div>
+        `).join('');
+    }
+
+    typewrite(el, text) {
+        clearTimeout(this.typewriterTimer);
+        el.textContent = '';
+        el.classList.remove('typewriter-cursor');
+        let i = 0;
+        const type = () => {
+            if (i < text.length) {
+                el.textContent += text[i++];
+                this.typewriterTimer = setTimeout(type, 35 + Math.random() * 35);
+            } else {
+                el.classList.add('typewriter-cursor');
             }
         };
+        setTimeout(type, 250);
     }
 
-    handleLogin(e) {
-        e.preventDefault();
-        const password = document.getElementById('password').value;
-        const errorEl = document.getElementById('login-error');
-
-        if (password === this.accessCode) {
-            localStorage.setItem('loggedIn', 'true');
-            this.showResume();
-        } else {
-            errorEl.textContent = 'Invalid access code. Try: aqib123';
-            errorEl.classList.remove('hidden');
-        }
+    setupScrollAnimations() {
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.08 });
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
     }
 
-    checkLoginStatus() {
-        if (localStorage.getItem('loggedIn') === 'true') {
-            this.showResume();
-        }
+    triggerVisibleAnimations() {
+        document.querySelectorAll('.fade-in').forEach(el => {
+            if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('visible');
+        });
     }
 
-    showResume() {
-        document.getElementById('login-container').classList.add('hidden');
-        document.getElementById('resume-container').classList.remove('hidden');
-        this.renderResume();
-    }
-
-    switchProfession(profession) {
-        this.currentProfession = profession;
-        this.renderResume();
-    }
-
-    renderResume() {
-        const resume = this.resumes[this.currentProfession];
-        if (!resume) return;
-
-        document.querySelector('header h1').textContent = resume.title || 'Aqib';
-
-        const content = document.getElementById('resume-content');
-        content.innerHTML = `
-            ${resume.summary ? `<div class="resume-section"><h2>Professional Summary</h2><p>${resume.summary}</p></div>` : ''}
-            
-            ${resume.experience ? `
-                <div class="resume-section">
-                    <h2>Experience</h2>
-                    <ul>${resume.experience.map(exp => `<li>${exp}</li>`).join('')}</ul>
-                </div>
-            ` : ''}
-            
-            ${resume.skills ? `
-                <div class="resume-section">
-                    <h2>Skills</h2>
-                    <div class="skills">${resume.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}</div>
-                </div>
-            ` : ''}
-            
-            ${resume.education ? `
-                <div class="resume-section">
-                    <h2>Education</h2>
-                    <ul>${resume.education.map(edu => `<li>${edu}</li>`).join('')}</ul>
-                </div>
-            ` : ''}
-            
-            ${resume.contact ? `
-                <div class="resume-section">
-                    <h2>Contact</h2>
-                    <ul>
-                        ${resume.contact.email ? `<li>Email: <a href="mailto:${resume.contact.email}">${resume.contact.email}</a></li>` : ''}
-                        ${resume.contact.linkedin ? `<li>LinkedIn: <a href="https://${resume.contact.linkedin}" target="_blank">${resume.contact.linkedin}</a></li>` : ''}
-                        ${resume.contact.github ? `<li>GitHub: <a href="https://${resume.contact.github}" target="_blank">${resume.contact.github}</a></li>` : ''}
-                    </ul>
-                </div>
-            ` : ''}
-        `;
-    }
-
-    logout() {
-        localStorage.removeItem('loggedIn');
-        document.getElementById('login-container').classList.remove('hidden');
-        document.getElementById('resume-container').classList.add('hidden');
-        document.getElementById('password').value = '';
-        document.getElementById('login-error').classList.add('hidden');
+    setupDarkMode() {
+        const toggle = document.getElementById('dark-toggle');
+        const apply = (theme) => {
+            document.documentElement.dataset.theme = theme;
+            toggle.textContent = theme === 'dark' ? '☀' : '◑';
+            localStorage.setItem('theme', theme);
+        };
+        apply(localStorage.getItem('theme') || 'light');
+        toggle.addEventListener('click', () => {
+            apply(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark');
+        });
     }
 }
 
-// Initialize app when DOM loads
-document.addEventListener('DOMContentLoaded', () => {
-    new ResumeApp();
-});
+document.addEventListener('DOMContentLoaded', () => new ResumeApp());
