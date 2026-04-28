@@ -1,0 +1,159 @@
+{
+    "it-resume": {
+        "name": "Aqib Farid",
+        "title": "Cloud & Backend Engineer",
+        "subtitle": "Technology-Focused Cloud & Backend Engineer",
+        "tagline": "AWS infrastructure, scalable backend systems, reliability, security, and delivery leadership",
+        "stats": [
+            { "label": "Years Exp.", "value": "7+", "icon": "\ud83d\udcc5" },
+            { "label": "Team Led", "value": "6", "icon": "\ud83d\udc65" },
+            { "label": "Users Supported", "value": "10K+", "icon": "\u26a1" },
+            { "label": "AWS Certified", "value": "SAA", "icon": "\u2601" }
+        ],
+        "summary": "Technology-focused Cloud & Backend Engineer with 7+ years of experience leading teams, building scalable cloud-based systems, and managing production environments. Strong background in AWS infrastructure, system reliability, security best practices, and stakeholder collaboration. Proven ability to deliver end-to-end solutions, optimise costs, and improve operational efficiency across diverse environments.",
+        "experience": [
+            {
+                "role": "Cloud & Backend Engineer / Team Lead",
+                "company": "Smart Concepts 721",
+                "period": "Feb 2025 - Present",
+                "location": "Sydney, Australia",
+                "highlights": [
+                    "Led a cross-functional team of 4 developers and 2 designers, managing task allocation, delivery timelines, and quality.",
+                    "Designed and maintained AWS-based infrastructure using VPC, EC2, Lambda, and API Gateway across production and staging environments.",
+                    "Optimised cloud costs by evaluating services and managing resource utilisation based on performance and budget requirements.",
+                    "Implemented security practices including MFA, IAM policies, and secure configurations aligned with industry standards.",
+                    "Monitored system performance using CloudWatch and logs, proactively resolving issues.",
+                    "Handled production incidents, coordinating fixes across systems and team members under time pressure.",
+                    "Collaborated with stakeholders to translate business requirements into scalable technical solutions."
+                ]
+            },
+            {
+                "role": "Cloud & Backend Engineer",
+                "company": "Quran Cube",
+                "period": "Jan 2023 - Feb 2025",
+                "location": "Remote",
+                "highlights": [
+                    "Designed and implemented scalable backend systems supporting 10K+ users.",
+                    "Contributed to technology planning and budgeting decisions, balancing cost and performance.",
+                    "Improved system performance by approximately 25-30% through optimisation and efficient architecture.",
+                    "Implemented secure authentication and data handling mechanisms.",
+                    "Delivered features end-to-end from design to deployment."
+                ]
+            },
+            {
+                "role": "Cloud Engineer / Backend Developer",
+                "company": "AiP Defense",
+                "period": "Feb 2021 - Dec 2022",
+                "location": "Remote",
+                "highlights": [
+                    "Built and maintained cloud-based systems handling 8K-15K+ API requests per day.",
+                    "Improved API performance and system reliability by approximately 30-40%.",
+                    "Contributed to scalable system design and architecture decisions.",
+                    "Resolved production issues, reducing system failures by approximately 25-30%.",
+                    "Implemented event-driven processing for scalable workloads."
+                ]
+            },
+            {
+                "role": "Cloud Engineer",
+                "company": "Multiple Clients",
+                "period": "Feb 2021 - Aug 2022",
+                "location": "Freelance / Contract",
+                "highlights": [
+                    "Delivered backend and cloud solutions across multiple projects using AWS.",
+                    "Designed systems supporting 1K-5K users per month.",
+                    "Implemented authentication and access control using AWS Cognito and IAM.",
+                    "Improved performance and reduced latency by approximately 20-30%.",
+                    "Managed multiple projects with consistent delivery and client satisfaction."
+                ]
+            },
+            {
+                "role": "Software Engineer",
+                "company": "Technology4Seniors (CA)",
+                "period": "Jan 2020 - Dec 2020",
+                "location": "Remote",
+                "highlights": [
+                    "Contributed to IT governance practices, including documentation of systems and workflows.",
+                    "Improved team processes and standardised development practices.",
+                    "Supported secure and reliable cloud-based system implementation.",
+                    "Enhanced system performance and stability."
+                ]
+            },
+            {
+                "role": "Software Engineer",
+                "company": "EIVA (AI Solution)",
+                "period": "Jan 2018 - Jan 2020",
+                "location": "Remote",
+                "highlights": [
+                    "Supported infrastructure setup and management for cloud-based applications.",
+                    "Developed backend services and APIs for AI-driven systems.",
+                    "Improved system stability and reliability through debugging and testing.",
+                    "Assisted in maintaining production environments."
+                ]
+            }
+        ],
+        "skills": {
+            "Cloud & Infrastructure": [
+                "AWS Infrastructure",
+                "VPC",
+                "EC2",
+                "Lambda",
+                "API Gateway",
+                "CloudWatch"
+            ],
+            "Systems & Reliability": [
+                "System Design",
+                "Distributed Systems",
+                "Production Environments",
+                "Incident Management",
+                "Performance Optimisation"
+            ],
+            "Security & Governance": [
+                "MFA",
+                "IAM",
+                "Logging",
+                "Access Control",
+                "Process Improvement",
+                "Governance"
+            ],
+            "Leadership & Delivery": [
+                "Team Leadership",
+                "Delivery Management",
+                "Stakeholder Communication",
+                "Requirements Translation",
+                "Cost Optimisation",
+                "Budget Awareness"
+            ]
+        },
+        "projects": [
+            {
+                "name": "Cloud-Based Scalable System (URL Shortener)",
+                "description": "Designed a scalable URL shortener architecture handling 50K+ simulated requests per day, with caching that reduced database load by approximately 60%, fault-tolerant APIs, low latency under 100ms, and documented scaling strategy.",
+                "tech": ["AWS", "Caching", "API Design", "Scalable Architecture"],
+                "highlight": true
+            }
+        ],
+        "education": [
+            {
+                "degree": "AWS Certified Solutions Architect - Associate",
+                "school": "Amazon Web Services",
+                "detail": "Certification"
+            },
+            {
+                "degree": "MS Biotechnology",
+                "school": "Macquarie University, Sydney",
+                "period": "2023 - 2025"
+            },
+            {
+                "degree": "BS Botany",
+                "school": "Bahauddin Zakariya University"
+            }
+        ],
+        "contact": {
+            "email": "me@aqib.org",
+            "phone": "+61 468 993 675",
+            "location": "Sydney, Australia",
+            "website": "www.aqib.org",
+            "github": "github.com/Smarto-Dev"
+        }
+    }
+}
