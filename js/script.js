@@ -36,10 +36,14 @@ class ResumeApp {
     }
 
     loadFromHash() {
-        const hash = window.location.hash.slice(1);
+        const hash  = window.location.hash.slice(1);
         const roles = Object.keys(this.resumes);
         if (!roles.length) return;
-        const role = roles.includes(hash) ? hash : roles[0];
+        const saved = localStorage.getItem('aqib_default_resume');
+        let role;
+        if (hash && roles.includes(hash))        role = hash;
+        else if (saved && roles.includes(saved)) role = saved;
+        else                                     role = roles[0];
         this.switchRole(role);
     }
 

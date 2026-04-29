@@ -155,5 +155,114 @@
             "website": "www.aqib.org",
             "github": "github.com/Smarto-Dev"
         }
+    },
+    "botanist": {
+        "name": "Aqib Farid",
+        "title": "Botanist & Plant Scientist",
+        "subtitle": "Plant Biology & Biotechnology Researcher",
+        "tagline": "Plant systematics, molecular biotechnology, biodiversity research, and environmental science",
+        "stats": [
+            { "label": "Research Yrs", "value": "7+", "icon": "🌿" },
+            { "label": "Degrees", "value": "2", "icon": "🎓" },
+            { "label": "Specimens", "value": "100+", "icon": "🔬" },
+            { "label": "Field Studies", "value": "4", "icon": "🌱" }
+        ],
+        "summary": "Botanist and plant scientist with a Bachelor of Science in Botany and a Master of Science in Biotechnology from Macquarie University, Sydney. Experienced in plant taxonomy, herbarium curation, field research, and molecular laboratory techniques. Combines a strong foundation in plant systematics and ecology with applied biotechnology skills including tissue culture, DNA analysis, and molecular biology. Passionate about biodiversity conservation, sustainable agriculture, and plant-based research.",
+        "experience": [
+            {
+                "role": "Graduate Researcher – Plant Biotechnology",
+                "company": "Macquarie University",
+                "period": "2023 - 2025",
+                "location": "Sydney, Australia",
+                "highlights": [
+                    "Conducted graduate research in plant biotechnology as part of MS Biotechnology programme.",
+                    "Applied molecular techniques including DNA extraction, PCR, and gel electrophoresis to study plant biology.",
+                    "Performed plant tissue culture experiments and maintained sterile lab environments.",
+                    "Analysed experimental data and contributed to academic reports and research presentations.",
+                    "Collaborated with research supervisors and peers on study design, methodology, and interpretation of results.",
+                    "Maintained detailed laboratory records and followed institutional biosafety protocols."
+                ]
+            },
+            {
+                "role": "Botanical Field Researcher & Lab Assistant",
+                "company": "Bahauddin Zakariya University",
+                "period": "2014 - 2018",
+                "location": "Pakistan",
+                "highlights": [
+                    "Conducted systematic field surveys for plant species identification, collection, and documentation.",
+                    "Prepared and maintained a collection of 100+ pressed herbarium specimens with accurate taxonomic labelling.",
+                    "Studied plant morphology, anatomy, and ecology through structured coursework and independent fieldwork.",
+                    "Performed microscopy and botanical dissections for anatomical and histological analysis.",
+                    "Assisted in teaching laboratory sessions and supporting junior students with plant identification exercises.",
+                    "Contributed to research on regional plant biodiversity, ethnobotany, and conservation status."
+                ]
+            }
+        ],
+        "skills": {
+            "Plant Science": [
+                "Plant Taxonomy",
+                "Plant Morphology",
+                "Plant Ecology",
+                "Ethnobotany",
+                "Herbarium Curation",
+                "Field Identification"
+            ],
+            "Biotechnology & Lab": [
+                "Tissue Culture",
+                "DNA Extraction",
+                "PCR & Gel Electrophoresis",
+                "Molecular Biology",
+                "Microscopy",
+                "Spectrophotometry"
+            ],
+            "Research & Analysis": [
+                "Field Research Design",
+                "Data Collection",
+                "Statistical Analysis",
+                "Scientific Writing",
+                "Literature Review",
+                "Lab Documentation"
+            ],
+            "Environmental Science": [
+                "Biodiversity Assessment",
+                "Conservation Biology",
+                "Sustainable Agriculture",
+                "Environmental Monitoring",
+                "GIS (Fundamentals)",
+                "Biosafety Compliance"
+            ]
+        },
+        "projects": [
+            {
+                "name": "Plant Biotechnology Research – Macquarie University",
+                "description": "Graduate-level research applying molecular biology and biotechnology methods to plant science, including experimental design, tissue culture protocols, DNA-based analysis, and academic reporting as part of MS Biotechnology.",
+                "tech": ["Molecular Biology", "Tissue Culture", "PCR", "Plant Genomics"],
+                "highlight": true
+            },
+            {
+                "name": "Regional Herbarium Biodiversity Survey",
+                "description": "Systematic field survey cataloguing local plant species across multiple ecological zones, resulting in a curated herbarium collection of 100+ specimens with full taxonomic and ecological documentation.",
+                "tech": ["Field Research", "Plant Taxonomy", "Herbarium", "Biodiversity Documentation"]
+            }
+        ],
+        "education": [
+            {
+                "degree": "MS Biotechnology",
+                "school": "Macquarie University, Sydney",
+                "period": "2023 - 2025"
+            },
+            {
+                "degree": "BS Botany",
+                "school": "Bahauddin Zakariya University",
+                "period": "2014 - 2018"
+            }
+        ],
+        "contact": {
+            "email": "me@aqib.org",
+            "phone": "+61 468 993 675",
+            "location": "Sydney, Australia",
+            "website": "www.aqib.org",
+            "github": "github.com/Smarto-Dev"
+        }
     }
 }

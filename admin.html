@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin – aqib.org</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+    <!-- ===== Login View ===== -->
+    <div id="login-view">
+        <div class="login-card">
+            <div class="login-icon">&#128274;</div>
+            <h1 class="login-title">Admin Login</h1>
+            <p class="login-sub">Manage your resume settings</p>
+            <form id="login-form" autocomplete="off">
+                <div class="field-wrap">
+                    <input type="password" id="password-input" class="field" placeholder="Password" autofocus>
+                </div>
+                <div id="login-error" class="error-msg"></div>
+                <button type="submit" id="login-btn" class="btn btn-primary btn-full">
+                    <span id="login-btn-text">Sign In</span>
+                    <span id="login-spinner" class="spinner" hidden></span>
+                </button>
+            </form>
+            <a href="index.html" class="back-link">&#8592; Back to site</a>
+        </div>
+        <div class="login-theme-toggle">
+            <button id="dark-toggle-login" title="Toggle dark mode">&#9680;</button>
+        </div>
+    </div>
+
+    <!-- ===== Dashboard View ===== -->
+    <div id="dashboard-view" hidden>
+        <nav class="admin-nav">
+            <div class="admin-nav-left">
+                <span class="admin-brand">&#128274; Admin</span>
+                <span class="admin-nav-sep">&middot;</span>
+                <span class="admin-nav-hint">aqib.org</span>
+            </div>
+            <div class="admin-nav-right">
+                <button id="dark-toggle-dash" class="btn-icon" title="Toggle dark mode">&#9680;</button>
+                <a href="index.html" class="btn btn-ghost" target="_blank">View Site &#8599;</a>
+                <button id="logout-btn" class="btn btn-outline">Logout</button>
+            </div>
+        </nav>
+
+        <div class="admin-body">
+
+            <!-- Default Resume -->
+            <section class="admin-section">
+                <div class="section-header">
+                    <h2 class="section-title">Default Resume</h2>
+                    <p class="section-desc">Visitors who land on the site with no URL hash will see this resume.</p>
+                </div>
+                <div id="resume-list" class="resume-list"></div>
+                <div id="save-toast" class="save-toast" hidden>&#10003; Default saved</div>
+            </section>
+
+            <!-- Change Password -->
+            <section class="admin-section">
+                <div class="section-header">
+                    <h2 class="section-title">Change Password</h2>
+                    <p class="section-desc">Set a new admin password. You'll need to log in again after changing it.</p>
+                </div>
+                <form id="change-password-form" class="password-form" autocomplete="new-password">
+                    <div class="password-fields">
+                        <div class="field-wrap">
+                            <label class="field-label">New Password</label>
+                            <input type="password" id="new-password" class="field" placeholder="New password" autocomplete="new-password">
+                        </div>
+                        <div class="field-wrap">
+                            <label class="field-label">Confirm Password</label>
+                            <input type="password" id="confirm-password" class="field" placeholder="Confirm password" autocomplete="new-password">
+                        </div>
+                    </div>
+                    <div id="pw-error" class="error-msg"></div>
+                    <div id="pw-success" class="success-msg" hidden>Password updated. Please log in again.</div>
+                    <button type="submit" class="btn btn-primary">Update Password</button>
+                </form>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="data/resumes-inline.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>

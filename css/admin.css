@@ -1,0 +1,429 @@
+/* ===== Admin – Custom Properties ===== */
+:root {
+    --primary: #6C63FF;
+    --primary-light: #8B85FF;
+    --primary-dim: rgba(108, 99, 255, 0.12);
+    --accent: #FF6B6B;
+    --success: #38A169;
+    --success-dim: rgba(56, 161, 105, 0.12);
+    --bg: #f0f2f8;
+    --surface: #ffffff;
+    --surface-2: #f7f9fc;
+    --border: #e2e8f0;
+    --text: #1a202c;
+    --text-secondary: #4a5568;
+    --text-muted: #718096;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.05);
+    --shadow-lg: 0 4px 6px rgba(0,0,0,0.05), 0 10px 25px rgba(0,0,0,0.1);
+    --radius: 12px;
+    --t: 0.2s ease;
+}
+
+[data-theme="dark"] {
+    --bg: #0d1117;
+    --surface: #161b27;
+    --surface-2: #1a2035;
+    --border: #2d3748;
+    --text: #e8edf5;
+    --text-secondary: #a0aec0;
+    --text-muted: #718096;
+    --shadow: 0 1px 3px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.2);
+    --shadow-lg: 0 4px 6px rgba(0,0,0,0.3), 0 10px 25px rgba(0,0,0,0.4);
+}
+
+/* ===== Reset ===== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+    transition: background var(--t), color var(--t);
+}
+
+/* ===== Login Page ===== */
+#login-view {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    position: relative;
+    background: linear-gradient(140deg, #2b2690 0%, #6C63FF 40%, #9F7AEA 100%);
+    background-size: 300% 300%;
+    animation: gradientFlow 10s ease infinite;
+}
+
+@keyframes gradientFlow {
+    0%, 100% { background-position: 0% 50%; }
+    50%       { background-position: 100% 50%; }
+}
+
+.login-card {
+    background: var(--surface);
+    border-radius: 18px;
+    padding: 2.5rem 2.25rem 2rem;
+    width: 100%;
+    max-width: 390px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    text-align: center;
+    animation: cardPop 0.5s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+}
+
+@keyframes cardPop {
+    from { opacity: 0; transform: scale(0.9) translateY(12px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.login-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    display: block;
+    animation: iconBounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s both;
+}
+
+@keyframes iconBounce {
+    from { opacity: 0; transform: scale(0.5); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+.login-title {
+    font-size: 1.55rem;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    margin-bottom: 0.35rem;
+}
+
+.login-sub {
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    margin-bottom: 1.75rem;
+}
+
+.login-theme-toggle {
+    position: fixed;
+    top: 1.25rem;
+    right: 1.25rem;
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 1.5rem;
+    color: var(--text-muted);
+    font-size: 0.83rem;
+    text-decoration: none;
+    transition: color var(--t);
+}
+
+.back-link:hover { color: var(--primary); }
+
+/* ===== Admin Nav ===== */
+.admin-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    padding: 0.65rem 1.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    transition: background var(--t), border-color var(--t);
+}
+
+.admin-nav-left, .admin-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    flex-wrap: wrap;
+}
+
+.admin-brand {
+    font-weight: 700;
+    color: var(--primary);
+    font-size: 1rem;
+    letter-spacing: -0.01em;
+}
+
+.admin-nav-sep { color: var(--border); }
+.admin-nav-hint { color: var(--text-muted); font-size: 0.83rem; }
+
+/* ===== Admin Body ===== */
+.admin-body {
+    max-width: 760px;
+    margin: 2.5rem auto;
+    padding: 0 1.5rem 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* ===== Sections ===== */
+.admin-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.75rem;
+    box-shadow: var(--shadow);
+    transition: background var(--t), border-color var(--t);
+}
+
+.section-header { margin-bottom: 1.25rem; }
+
+.section-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.01em;
+    margin-bottom: 0.3rem;
+}
+
+.section-desc {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* ===== Resume List ===== */
+.resume-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.resume-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.15rem;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface-2);
+    transition: all var(--t);
+}
+
+.resume-card.is-default {
+    border-color: var(--primary);
+    background: var(--primary-dim);
+}
+
+.resume-info { flex: 1; min-width: 0; }
+
+.resume-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text);
+}
+
+.resume-slug {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-family: 'Courier New', monospace;
+    margin-top: 0.2rem;
+}
+
+.badge-default {
+    display: inline-block;
+    background: var(--primary);
+    color: white;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.18rem 0.6rem;
+    border-radius: 20px;
+    margin-top: 0.35rem;
+}
+
+/* ===== Save Toast ===== */
+.save-toast {
+    margin-top: 0.85rem;
+    color: var(--success);
+    font-size: 0.85rem;
+    font-weight: 600;
+    animation: fadeSlideIn 0.25s ease both;
+}
+
+@keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== Password Form ===== */
+.password-form { display: flex; flex-direction: column; gap: 1rem; }
+
+.password-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.85rem;
+}
+
+@media (max-width: 540px) { .password-fields { grid-template-columns: 1fr; } }
+
+/* ===== Form Fields ===== */
+.field-wrap { display: flex; flex-direction: column; gap: 0.3rem; }
+
+.field-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.field {
+    width: 100%;
+    padding: 0.65rem 0.9rem;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface-2);
+    color: var(--text);
+    font-size: 0.92rem;
+    font-family: inherit;
+    transition: border-color var(--t), box-shadow var(--t), background var(--t);
+    outline: none;
+}
+
+.field:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-dim);
+}
+
+.field::placeholder { color: var(--text-muted); }
+
+/* ===== Messages ===== */
+.error-msg {
+    color: #E53E3E;
+    font-size: 0.83rem;
+    min-height: 1.2em;
+    font-weight: 500;
+}
+
+.success-msg {
+    color: var(--success);
+    font-size: 0.85rem;
+    font-weight: 600;
+    background: var(--success-dim);
+    padding: 0.5rem 0.85rem;
+    border-radius: 7px;
+}
+
+/* ===== Buttons ===== */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1.1rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    transition: all var(--t);
+    white-space: nowrap;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-primary:hover { background: var(--primary-light); transform: translateY(-1px); }
+.btn-primary:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+.btn-outline {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1.5px solid var(--border);
+}
+
+.btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+
+.btn-ghost {
+    background: transparent;
+    color: var(--text-secondary);
+}
+
+.btn-ghost:hover { color: var(--primary); }
+
+.btn-full { width: 100%; margin-top: 0.5rem; padding: 0.7rem; font-size: 0.95rem; }
+
+.btn-set {
+    padding: 0.38rem 0.9rem;
+    border-radius: 7px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    border: 1.5px solid var(--border);
+    background: transparent;
+    color: var(--text-secondary);
+    transition: all var(--t);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.btn-set:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+.btn-set:disabled {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+    cursor: default;
+    opacity: 0.85;
+}
+
+.btn-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border);
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--t);
+    font-family: inherit;
+}
+
+.btn-icon:hover { border-color: var(--primary); color: var(--primary); }
+
+/* ===== Spinner ===== */
+.spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255,255,255,0.35);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    display: inline-block;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 600px) {
+    .login-card { padding: 2rem 1.5rem 1.75rem; }
+    .admin-body { padding: 0 1rem 2rem; margin-top: 1.5rem; }
+    .admin-section { padding: 1.25rem; }
+    .admin-nav { padding: 0.6rem 1rem; }
+}
