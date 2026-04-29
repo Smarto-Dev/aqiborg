@@ -1,9 +1,9 @@
-name: Deploy to cPanel
+name: Deploy to cPanel (SFTP)
 
 on:
   push:
     branches:
-      - main   # change if your branch is not main
+      - main
 
 jobs:
   deploy:
@@ -13,10 +13,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Upload to cPanel via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      - name: Deploy via SFTP
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with:
-          server: ${{ secrets.FTP_SERVER }}
+          server: server2.cybernetaustralia.com
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: public_html/
+          port: 7861
+          local_path: ./
+          remote_path: public_html/
