@@ -44,13 +44,7 @@ function sha256Sync(message) {
     return H.map(x => x.toString(16).padStart(8,'0')).join('');
 }
 
-async function sha256(text) {
-    if (typeof crypto !== 'undefined' && crypto.subtle) {
-        try {
-            const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
-            return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
-        } catch (_) { /* fall through to sync */ }
-    }
+function sha256(text) {
     return sha256Sync(text);
 }
 
@@ -152,7 +146,7 @@ function renderResumeList() {
 }
 
 // ===== Login =====
-document.getElementById('login-form').addEventListener('submit', async e => {
+document.getElementById('login-form').addEventListener('submit', e => {
     e.preventDefault();
     const password  = document.getElementById('password-input').value;
     const loginErr  = document.getElementById('login-error');
@@ -167,14 +161,16 @@ document.getElementById('login-form').addEventListener('submit', async e => {
     loginBtn.disabled = true;
     loginErr.textContent = '';
 
-    const hash = await sha256(password);
-    await new Promise(r => setTimeout(r, 320));
-
-    if (hash === getStoredHash()) {
-        sessionStorage.setItem(ADMIN.SESSION_KEY, 'true');
-        showDashboard();
-    } else {
-        loginErr.textContent = 'Incorrect password.';
+    try {
+        const hash = sha256(password);
+        if (hash === getStoredHash()) {
+            sessionStorage.setItem(ADMIN.SESSION_KEY, 'true');
+            showDashboard();
+        } else {
+            loginErr.textContent = 'Incorrect password.';
+        }
+    } catch (err) {
+        loginErr.textContent = 'Login error: ' + err.message;
     }
 
     loginText.hidden  = false;
@@ -183,7 +179,7 @@ document.getElementById('login-form').addEventListener('submit', async e => {
 });
 
 // ===== Change Password =====
-document.getElementById('change-password-form').addEventListener('submit', async e => {
+document.getElementById('change-password-form').addEventListener('submit', e => {
     e.preventDefault();
     const pwErr     = document.getElementById('pw-error');
     const pwSuccess = document.getElementById('pw-success');
@@ -193,10 +189,10 @@ document.getElementById('change-password-form').addEventListener('submit', async
     pwErr.textContent = '';
     pwSuccess.hidden  = true;
 
-    if (newPw.length < 6)     { pwErr.textContent = 'Password must be at least 6 characters.'; return; }
-    if (newPw !== confirmPw)  { pwErr.textContent = 'Passwords do not match.'; return; }
+    if (newPw.length < 6)    { pwErr.textContent = 'Password must be at least 6 characters.'; return; }
+    if (newPw !== confirmPw) { pwErr.textContent = 'Passwords do not match.'; return; }
 
-    localStorage.setItem(ADMIN.HASH_KEY, await sha256(newPw));
+    localStorage.setItem(ADMIN.HASH_KEY, sha256(newPw));
     sessionStorage.removeItem(ADMIN.SESSION_KEY);
     document.getElementById('new-password').value     = '';
     document.getElementById('confirm-password').value = '';
