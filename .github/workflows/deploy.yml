@@ -21,4 +21,4 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           port: 7861
           local_path: ./
-          remote_path: public_html/
+          remote_path: aqib.org/
