@@ -55,16 +55,40 @@ const ADMIN = {
     DEFAULT_KEY:  'aqib_default_resume',
     HASH_KEY:     'aqib_admin_hash',
     HIDDEN_KEY:   'aqib_hidden_resumes',
+    API_TOKEN:    'aqib-admin-2024',
 };
 
-// ===== Helpers =====
-function getStoredHash()   { return localStorage.getItem(ADMIN.HASH_KEY) || ADMIN.DEFAULT_HASH; }
-function isLoggedIn()      { return sessionStorage.getItem(ADMIN.SESSION_KEY) === 'true'; }
-function getHiddenSet()    { try { return new Set(JSON.parse(localStorage.getItem(ADMIN.HIDDEN_KEY) || '[]')); } catch { return new Set(); } }
-function saveHiddenSet(s)  { localStorage.setItem(ADMIN.HIDDEN_KEY, JSON.stringify([...s])); }
+// ===== DOM helpers =====
+function el(id)   { return document.getElementById(id); }
+function hide(id) { el(id).classList.add('d-none'); }
+function show(id) { el(id).classList.remove('d-none'); }
 
-function hide(id) { document.getElementById(id).style.display = 'none'; }
-function show(id, d) { document.getElementById(id).style.display = d || 'block'; }
+// ===== Auth helpers =====
+function getStoredHash() { return localStorage.getItem(ADMIN.HASH_KEY) || ADMIN.DEFAULT_HASH; }
+function isLoggedIn()    { return sessionStorage.getItem(ADMIN.SESSION_KEY) === 'true'; }
+
+// ===== Config API (server-side persistence) =====
+const CONFIG_API = 'api/config.php';
+
+async function loadConfig() {
+    try {
+        const r = await fetch(CONFIG_API + '?t=' + Date.now());
+        if (r.ok) return await r.json();
+    } catch (_) {}
+    return { default_resume: '', hidden_resumes: [] };
+}
+
+async function saveConfig(cfg) {
+    try {
+        const r = await fetch(CONFIG_API, {
+            method:  'POST',
+            headers: { 'Content-Type': 'application/json',
+                       'X-Admin-Token': ADMIN.API_TOKEN },
+            body: JSON.stringify(cfg),
+        });
+        return r.ok;
+    } catch (_) { return false; }
+}
 
 // ===== Views =====
 function showDashboard() {
@@ -76,21 +100,24 @@ function showDashboard() {
 function showLogin(msg) {
     show('login-view');
     hide('dashboard-view');
-    document.getElementById('password-input').value    = '';
-    document.getElementById('login-error').textContent = msg || '';
+    el('password-input').value    = '';
+    el('login-error').textContent = msg || '';
 }
 
 // ===== Resume List =====
-function renderResumeList() {
-    const resumes   = window.RESUME_DATA || {};
-    const hidden    = getHiddenSet();
-    const defaultKey = localStorage.getItem(ADMIN.DEFAULT_KEY) || Object.keys(resumes)[0];
-    const list      = document.getElementById('resume-list');
-    const toast     = document.getElementById('save-toast');
+let cfg = { default_resume: '', hidden_resumes: [] };
+
+async function renderResumeList() {
+    cfg = await loadConfig();
+    const resumes    = window.RESUME_DATA || {};
+    const hiddenSet  = new Set(cfg.hidden_resumes || []);
+    const defaultKey = cfg.default_resume || Object.keys(resumes)[0];
+    const list       = el('resume-list');
+    const toast      = el('save-toast');
 
     list.innerHTML = Object.entries(resumes).map(([key, data]) => {
         const isDefault = key === defaultKey;
-        const isHidden  = hidden.has(key);
+        const isHidden  = hiddenSet.has(key);
         return `
         <div class="resume-card ${isDefault && !isHidden ? 'is-default' : ''} ${isHidden ? 'is-hidden' : ''}">
             <div class="resume-info">
@@ -107,63 +134,58 @@ function renderResumeList() {
                 </button>
                 <label class="toggle-wrap" title="${isHidden ? 'Show resume' : 'Hide resume'}">
                     <input type="checkbox" class="toggle-input" data-key="${key}" ${isHidden ? '' : 'checked'}>
-                    <span class="toggle-track">
-                        <span class="toggle-thumb"></span>
-                    </span>
+                    <span class="toggle-track"><span class="toggle-thumb"></span></span>
                     <span class="toggle-label">${isHidden ? 'Hidden' : 'Visible'}</span>
                 </label>
             </div>
         </div>`;
     }).join('');
 
-    function flashToast() {
-        toast.style.display = 'block';
-        renderResumeList();
-        setTimeout(() => { toast.style.display = 'none'; }, 2500);
+    async function persist(newCfg) {
+        const ok = await saveConfig(newCfg);
+        toast.textContent = ok ? '✓ Saved for all visitors' : '✓ Saved locally (API unavailable)';
+        show('save-toast');
+        await renderResumeList();
+        setTimeout(() => hide('save-toast'), 2800);
     }
 
     // Set Default
     list.querySelectorAll('.btn-set:not([disabled])').forEach(btn => {
         btn.addEventListener('click', () => {
-            localStorage.setItem(ADMIN.DEFAULT_KEY, btn.dataset.key);
-            flashToast();
+            persist({ ...cfg, default_resume: btn.dataset.key });
         });
     });
 
     // Visibility Toggle
     list.querySelectorAll('.toggle-input').forEach(cb => {
         cb.addEventListener('change', () => {
-            const key = cb.dataset.key;
-            const set = getHiddenSet();
-            if (cb.checked) {
-                set.delete(key);
-            } else {
-                set.add(key);
-                if (localStorage.getItem(ADMIN.DEFAULT_KEY) === key) {
-                    localStorage.removeItem(ADMIN.DEFAULT_KEY);
-                }
+            const key    = cb.dataset.key;
+            const hidden = new Set(cfg.hidden_resumes || []);
+            if (cb.checked) { hidden.delete(key); }
+            else {
+                hidden.add(key);
+                if (cfg.default_resume === key) cfg.default_resume = '';
             }
-            saveHiddenSet(set);
-            flashToast();
+            persist({ ...cfg, hidden_resumes: [...hidden] });
         });
     });
 }
 
 // ===== Login =====
-document.getElementById('login-form').addEventListener('submit', e => {
+el('login-form').addEventListener('submit', e => {
     e.preventDefault();
-    const password  = document.getElementById('password-input').value;
-    const loginErr  = document.getElementById('login-error');
-    const loginBtn  = document.getElementById('login-btn');
-    const loginText = document.getElementById('login-btn-text');
-    const loginSpin = document.getElementById('login-spinner');
+    const password  = el('password-input').value;
+    const loginErr  = el('login-error');
+    const loginBtn  = el('login-btn');
+    const loginText = el('login-btn-text');
+    const loginSpin = el('login-spinner');
 
     if (!password) { loginErr.textContent = 'Enter your password.'; return; }
 
-    loginText.style.display = 'none';
-    loginSpin.style.display = 'inline-block';
-    loginBtn.disabled       = true;
-    loginErr.textContent    = '';
+    loginText.classList.add('d-none');
+    loginSpin.classList.remove('d-none');
+    loginBtn.disabled    = true;
+    loginErr.textContent = '';
 
     try {
         const hash = sha256(password);
@@ -171,37 +193,36 @@ document.getElementById('login-form').addEventListener('submit', e => {
             sessionStorage.setItem(ADMIN.SESSION_KEY, 'true');
             showDashboard();
             return;
-        } else {
-            loginErr.textContent = 'Incorrect password.';
         }
+        loginErr.textContent = 'Incorrect password.';
     } catch (err) {
         loginErr.textContent = 'Error: ' + err.message;
     }
 
-    loginText.style.display = 'inline';
-    loginSpin.style.display = 'none';
-    loginBtn.disabled       = false;
+    loginText.classList.remove('d-none');
+    loginSpin.classList.add('d-none');
+    loginBtn.disabled = false;
 });
 
 // ===== Change Password =====
-document.getElementById('change-password-form').addEventListener('submit', e => {
+el('change-password-form').addEventListener('submit', e => {
     e.preventDefault();
-    const pwErr     = document.getElementById('pw-error');
-    const pwSuccess = document.getElementById('pw-success');
-    const newPw     = document.getElementById('new-password').value;
-    const confirmPw = document.getElementById('confirm-password').value;
+    const pwErr     = el('pw-error');
+    const pwSuccess = el('pw-success');
+    const newPw     = el('new-password').value;
+    const confirmPw = el('confirm-password').value;
 
-    pwErr.textContent          = '';
-    pwSuccess.style.display    = 'none';
+    pwErr.textContent = '';
+    pwSuccess.classList.add('d-none');
 
     if (newPw.length < 6)    { pwErr.textContent = 'Password must be at least 6 characters.'; return; }
     if (newPw !== confirmPw) { pwErr.textContent = 'Passwords do not match.'; return; }
 
     localStorage.setItem(ADMIN.HASH_KEY, sha256(newPw));
     sessionStorage.removeItem(ADMIN.SESSION_KEY);
-    document.getElementById('new-password').value     = '';
-    document.getElementById('confirm-password').value = '';
-    pwSuccess.style.display = 'block';
+    el('new-password').value     = '';
+    el('confirm-password').value = '';
+    pwSuccess.classList.remove('d-none');
     setTimeout(() => showLogin('Password changed. Please log in again.'), 1800);
 });
 

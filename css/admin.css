@@ -1,3 +1,6 @@
+/* Guaranteed hide — beats any CSS rule */
+.d-none { display: none !important; }
+
 /* ===== Admin – Custom Properties ===== */
 :root {
     --primary: #6C63FF;

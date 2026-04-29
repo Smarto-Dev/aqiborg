@@ -4,10 +4,12 @@ class ResumeApp {
         this.currentRole = null;
         this.typewriterTimer = null;
         this.toastTimer = null;
+        this.serverConfig = { default_resume: '', hidden_resumes: [] };
         this.init();
     }
 
     async init() {
+        await this.loadServerConfig();
         await this.loadResumes();
         this.setupDarkMode();
         this.setupScrollBehavior();
@@ -17,13 +19,16 @@ class ResumeApp {
         window.addEventListener('hashchange', () => this.loadFromHash());
     }
 
-    getHiddenResumes() {
-        try { return new Set(JSON.parse(localStorage.getItem('aqib_hidden_resumes') || '[]')); }
-        catch { return new Set(); }
+    async loadServerConfig() {
+        if (window.location.protocol === 'file:') return;
+        try {
+            const r = await fetch('api/config.php?t=' + Date.now());
+            if (r.ok) this.serverConfig = await r.json();
+        } catch (_) {}
     }
 
     filterResumes(all) {
-        const hidden = this.getHiddenResumes();
+        const hidden = new Set(this.serverConfig.hidden_resumes || []);
         return Object.fromEntries(Object.entries(all).filter(([key]) => !hidden.has(key)));
     }
 
@@ -46,14 +51,14 @@ class ResumeApp {
     }
 
     loadFromHash() {
-        const hash  = window.location.hash.slice(1);
-        const roles = Object.keys(this.resumes);
+        const hash       = window.location.hash.slice(1);
+        const roles      = Object.keys(this.resumes);
         if (!roles.length) return;
-        const saved = localStorage.getItem('aqib_default_resume');
+        const serverDefault = this.serverConfig.default_resume || '';
         let role;
-        if (hash && roles.includes(hash))        role = hash;
-        else if (saved && roles.includes(saved)) role = saved;
-        else                                     role = roles[0];
+        if (hash && roles.includes(hash))                 role = hash;
+        else if (serverDefault && roles.includes(serverDefault)) role = serverDefault;
+        else                                              role = roles[0];
         this.switchRole(role);
     }
 
