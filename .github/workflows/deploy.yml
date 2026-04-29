@@ -13,6 +13,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Build deploy package
+        run: |
+          mkdir -p dist
+          cp index.html admin.html dist/
+          cp -r css js data dist/
+
       - name: Deploy via SFTP
         uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with:
@@ -20,5 +26,5 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           port: 7861
-          local_path: ./
+          local_path: ./dist/
           remote_path: aqib.org/
