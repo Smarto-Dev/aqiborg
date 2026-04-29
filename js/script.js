@@ -17,22 +17,32 @@ class ResumeApp {
         window.addEventListener('hashchange', () => this.loadFromHash());
     }
 
+    getHiddenResumes() {
+        try { return new Set(JSON.parse(localStorage.getItem('aqib_hidden_resumes') || '[]')); }
+        catch { return new Set(); }
+    }
+
+    filterResumes(all) {
+        const hidden = this.getHiddenResumes();
+        return Object.fromEntries(Object.entries(all).filter(([key]) => !hidden.has(key)));
+    }
+
     async loadResumes() {
-        const fallbackResumes = window.RESUME_DATA || {};
+        let all = {};
         try {
             if (window.location.protocol === 'file:') {
-                this.resumes = fallbackResumes;
-                return;
+                all = window.RESUME_DATA || {};
+            } else {
+                const res = await fetch('data/resumes.json', { cache: 'no-store' });
+                if (!res.ok) throw new Error(`Resume data request failed with ${res.status}`);
+                all = await res.json();
             }
-            const res = await fetch('data/resumes.json', { cache: 'no-store' });
-            if (!res.ok) throw new Error(`Resume data request failed with ${res.status}`);
-            this.resumes = await res.json();
         } catch (e) {
             console.error('Could not load resumes.json', e);
-            this.resumes = fallbackResumes;
-        } finally {
-            this.renderRolePills();
+            all = window.RESUME_DATA || {};
         }
+        this.resumes = this.filterResumes(all);
+        this.renderRolePills();
     }
 
     loadFromHash() {
