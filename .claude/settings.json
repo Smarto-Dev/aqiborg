@@ -3,7 +3,8 @@
     "allow": [
       "Bash(node -e \"const crypto=require\\('crypto'\\); console.log\\(crypto.createHash\\('sha256'\\).update\\('aqibadmin'\\).digest\\('hex'\\)\\);\")",
       "Bash(node -e \"const crypto=require\\('crypto'\\); const pw='aqibadmin'; console.log\\('hash:', crypto.createHash\\('sha256'\\).update\\(pw\\).digest\\('hex'\\)\\);\")",
-      "Bash(node -e *)"
+      "Bash(node -e *)",
+      "Bash(git commit *)"
     ]
   }
 }
