@@ -63,17 +63,20 @@ function isLoggedIn()      { return sessionStorage.getItem(ADMIN.SESSION_KEY) ==
 function getHiddenSet()    { try { return new Set(JSON.parse(localStorage.getItem(ADMIN.HIDDEN_KEY) || '[]')); } catch { return new Set(); } }
 function saveHiddenSet(s)  { localStorage.setItem(ADMIN.HIDDEN_KEY, JSON.stringify([...s])); }
 
+function hide(id) { document.getElementById(id).style.display = 'none'; }
+function show(id, d) { document.getElementById(id).style.display = d || 'block'; }
+
 // ===== Views =====
 function showDashboard() {
-    document.getElementById('login-view').hidden     = true;
-    document.getElementById('dashboard-view').hidden = false;
+    hide('login-view');
+    show('dashboard-view');
     renderResumeList();
 }
 
 function showLogin(msg) {
-    document.getElementById('login-view').hidden     = false;
-    document.getElementById('dashboard-view').hidden = true;
-    document.getElementById('password-input').value  = '';
+    show('login-view');
+    hide('dashboard-view');
+    document.getElementById('password-input').value    = '';
     document.getElementById('login-error').textContent = msg || '';
 }
 
@@ -113,13 +116,17 @@ function renderResumeList() {
         </div>`;
     }).join('');
 
+    function flashToast() {
+        toast.style.display = 'block';
+        renderResumeList();
+        setTimeout(() => { toast.style.display = 'none'; }, 2500);
+    }
+
     // Set Default
     list.querySelectorAll('.btn-set:not([disabled])').forEach(btn => {
         btn.addEventListener('click', () => {
             localStorage.setItem(ADMIN.DEFAULT_KEY, btn.dataset.key);
-            toast.hidden = false;
-            renderResumeList();
-            setTimeout(() => { toast.hidden = true; }, 2500);
+            flashToast();
         });
     });
 
@@ -132,15 +139,12 @@ function renderResumeList() {
                 set.delete(key);
             } else {
                 set.add(key);
-                // If hiding the current default, clear it
                 if (localStorage.getItem(ADMIN.DEFAULT_KEY) === key) {
                     localStorage.removeItem(ADMIN.DEFAULT_KEY);
                 }
             }
             saveHiddenSet(set);
-            toast.hidden = false;
-            renderResumeList();
-            setTimeout(() => { toast.hidden = true; }, 2500);
+            flashToast();
         });
     });
 }
@@ -156,26 +160,27 @@ document.getElementById('login-form').addEventListener('submit', e => {
 
     if (!password) { loginErr.textContent = 'Enter your password.'; return; }
 
-    loginText.hidden  = true;
-    loginSpin.hidden  = false;
-    loginBtn.disabled = true;
-    loginErr.textContent = '';
+    loginText.style.display = 'none';
+    loginSpin.style.display = 'inline-block';
+    loginBtn.disabled       = true;
+    loginErr.textContent    = '';
 
     try {
         const hash = sha256(password);
         if (hash === getStoredHash()) {
             sessionStorage.setItem(ADMIN.SESSION_KEY, 'true');
             showDashboard();
+            return;
         } else {
             loginErr.textContent = 'Incorrect password.';
         }
     } catch (err) {
-        loginErr.textContent = 'Login error: ' + err.message;
+        loginErr.textContent = 'Error: ' + err.message;
     }
 
-    loginText.hidden  = false;
-    loginSpin.hidden  = true;
-    loginBtn.disabled = false;
+    loginText.style.display = 'inline';
+    loginSpin.style.display = 'none';
+    loginBtn.disabled       = false;
 });
 
 // ===== Change Password =====
@@ -186,8 +191,8 @@ document.getElementById('change-password-form').addEventListener('submit', e => 
     const newPw     = document.getElementById('new-password').value;
     const confirmPw = document.getElementById('confirm-password').value;
 
-    pwErr.textContent = '';
-    pwSuccess.hidden  = true;
+    pwErr.textContent          = '';
+    pwSuccess.style.display    = 'none';
 
     if (newPw.length < 6)    { pwErr.textContent = 'Password must be at least 6 characters.'; return; }
     if (newPw !== confirmPw) { pwErr.textContent = 'Passwords do not match.'; return; }
@@ -196,7 +201,7 @@ document.getElementById('change-password-form').addEventListener('submit', e => 
     sessionStorage.removeItem(ADMIN.SESSION_KEY);
     document.getElementById('new-password').value     = '';
     document.getElementById('confirm-password').value = '';
-    pwSuccess.hidden = false;
+    pwSuccess.style.display = 'block';
     setTimeout(() => showLogin('Password changed. Please log in again.'), 1800);
 });
 
