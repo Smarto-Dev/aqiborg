@@ -22,7 +22,7 @@ class ResumeApp {
     async loadServerConfig() {
         if (window.location.protocol === 'file:') return;
         try {
-            const r = await fetch('api/config.php?t=' + Date.now());
+            const r = await fetch('data/config.json?t=' + Date.now());
             if (r.ok) this.serverConfig = await r.json();
         } catch (_) {}
     }

@@ -1,13 +1,25 @@
-name: Deploy to cPanel (SFTP)
+name: Deploy to GitHub Pages
 
 on:
   push:
     branches:
       - main
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
       - name: Checkout code
@@ -17,14 +29,13 @@ jobs:
         run: |
           mkdir -p dist
           cp index.html admin.html dist/
-          cp -r css js data api dist/
+          cp -r css js data dist/
 
-      - name: Deploy via SFTP
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          server: server2.cybernetaustralia.com
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          port: 7861
-          local_path: ./dist/
-          remote_path: aqib.org/
+          path: ./dist/
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
