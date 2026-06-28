@@ -17,6 +17,7 @@ class ResumeApp {
         this.setupSectionNav();
         this.loadFromHash();
         window.addEventListener('hashchange', () => this.loadFromHash());
+        window.addEventListener('beforeprint', () => this.completeTypewriter());
     }
 
     async loadServerConfig() {
@@ -64,6 +65,7 @@ class ResumeApp {
 
     renderRolePills() {
         const container = document.getElementById('role-pills');
+        if (!container) return;
         container.innerHTML = '';
         Object.entries(this.resumes).forEach(([key, data]) => {
             const btn = document.createElement('button');
@@ -279,6 +281,8 @@ class ResumeApp {
 
     typewrite(el, text) {
         clearTimeout(this.typewriterTimer);
+        this.typewriterEl   = el;
+        this.typewriterText = text;
         el.textContent = '';
         el.classList.remove('typewriter-cursor');
         let i = 0;
@@ -291,6 +295,16 @@ class ResumeApp {
             }
         };
         setTimeout(type, 250);
+    }
+
+    // Make sure the printed/downloaded CV always shows the full title,
+    // even if the typewriter animation is still mid-stream.
+    completeTypewriter() {
+        clearTimeout(this.typewriterTimer);
+        if (this.typewriterEl && this.typewriterText != null) {
+            this.typewriterEl.textContent = this.typewriterText;
+            this.typewriterEl.classList.remove('typewriter-cursor');
+        }
     }
 
     setupScrollBehavior() {
