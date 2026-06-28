@@ -1,22 +1,30 @@
 {
     "ecologist": {
+        "brand": { "name": "East Coast", "tagline": "Ecology Focused" },
         "name": "Aqib Farid",
         "title": "Project Ecologist | Botanist | Bush Regenerator",
-        "subtitle": "Field Ecologist · Plant Conservationist · Environmental Researcher",
-        "tagline": "Flora surveys, threatened species conservation, bush regeneration, and ecological field research",
+        "roles": ["Field Ecologist", "Plant Conservationist", "Environmental Researcher"],
+        "profile": "Botanist and Ecologist with 4+ years of combined experience in ecological fieldwork, bush regeneration, flora surveys, threatened species conservation and environmental research. Skilled in identifying threatened flora, priority weeds and fauna habitat, conducting ecological assessments, and using GPS-enabled tablets and GIS to collect and manage field data. Passionate about delivering high-quality ecological outcomes while maintaining strong safety standards and effective client communication. Based in Central West NSW and committed to contributing to East Coast Ecology's impactful work.",
         "stats": [
-            { "label": "Years Exp.", "value": "4+", "icon": "🌿" },
-            { "label": "Field Roles", "value": "4", "icon": "🌱" },
-            { "label": "Memberships", "value": "5", "icon": "🤝" },
-            { "label": "Publication", "value": "1", "icon": "📄" }
+            { "label": "Years Exp.", "value": "4+", "target": "sec-experience" },
+            { "label": "Field Roles", "value": "4", "target": "sec-experience" },
+            { "label": "Memberships", "value": "5", "target": "sec-memberships" },
+            { "label": "Publication", "value": "1", "target": "sec-publication" }
         ],
-        "summary": "Botanist and Ecologist with 4+ years of combined experience in ecological fieldwork, bush regeneration, flora surveys, threatened species conservation and environmental research. Skilled in identifying threatened flora, priority weeds and fauna habitat, conducting ecological assessments, and using GPS-enabled tablets and GIS to collect and manage field data. Passionate about delivering high-quality ecological outcomes while maintaining strong safety standards and effective client communication. Based in Central West NSW and committed to contributing to impactful conservation work.",
+        "strengths": [
+            { "icon": "sprout", "title": "NSW Flora & Fauna", "text": "Strong knowledge of native plants, threatened species & fauna habitat" },
+            { "icon": "search", "title": "Threatened Flora", "text": "Experienced in identifying and protecting threatened flora & key habitats" },
+            { "icon": "target", "title": "Priority Weeds", "text": "Identify and manage priority weeds to support habitat health" },
+            { "icon": "pin", "title": "GPS & GIS", "text": "Skilled in field data collection using GPS & GIS platforms" },
+            { "icon": "users", "title": "Independent & Client", "text": "Able to work remotely, liaise with clients & deliver quality results" }
+        ],
         "experience": [
             {
                 "role": "Bush Regenerator / Ecological Restoration Crew",
                 "company": "Total Earth Care",
-                "period": "May 2026 - Present",
+                "period": "May 2026 – Present",
                 "location": "Penrith & Northern Beaches, NSW",
+                "icon": "leaf",
                 "highlights": [
                     "Conduct ecological restoration and bush regeneration across multiple council and private sites.",
                     "Identify and protect threatened flora including Grevillea juniperina and pencil orchids during works.",
@@ -29,8 +37,9 @@
             {
                 "role": "Botanist (Volunteer)",
                 "company": "Taronga Conservation Society Australia",
-                "period": "Jul 2025 - Apr 2026",
+                "period": "Jul 2025 – Apr 2026",
                 "location": "Mosman, NSW",
+                "icon": "leaf",
                 "highlights": [
                     "Assisted in native plant collections and conservation programs at Taronga Zoo.",
                     "Identified native and threatened flora including Grevillea exalata and assisted with habitat restoration.",
@@ -41,10 +50,11 @@
             {
                 "role": "Plant Physiologist (Research Scientist)",
                 "company": "Ittefaq Chemicals Group",
-                "period": "Jun 2022 - Dec 2022 · Jan 2024 - Jul 2024",
+                "period": "Jun 2022 – Dec 2022 · Jan 2024 – Jul 2024",
                 "location": "Pakistan",
+                "icon": "flask",
                 "highlights": [
-                    "Designed and implemented lab, greenhouse and field experiments on soil-plant-microbe interactions.",
+                    "Designed and implemented lab, greenhouse and field experiments on soil–plant–microbe interactions.",
                     "Evaluated plant responses to environmental stress across various soil and climatic conditions.",
                     "Analysed data using R and SAS to generate insights for sustainable plant management.",
                     "Produced comprehensive technical reports and presented findings to senior management.",
@@ -54,13 +64,51 @@
             {
                 "role": "Research Assistant (Plant Sciences)",
                 "company": "TOPSUN Group",
-                "period": "Jul 2020 - May 2022",
+                "period": "Jul 2020 – May 2022",
                 "location": "Pakistan",
+                "icon": "flask",
                 "highlights": [
                     "Conducted experiments on soil microbiota and plant stress tolerance for sustainable agriculture.",
                     "Assisted in field trials, data collection and lab analysis for multidisciplinary plant science projects.",
                     "Co-authored a peer-reviewed publication in the Asian Soil Journal."
                 ]
+            }
+        ],
+        "education": [
+            {
+                "degree": "Master of Biotechnology",
+                "school": "Macquarie University, Australia",
+                "period": "2023 – Expected Dec 2026",
+                "detail": "Relevant Areas: Biotechnology, Molecular Biology, Environmental Applications, Research Methods"
+            },
+            {
+                "degree": "Bachelor of Science (Honours) – Botany",
+                "school": "Bahauddin Zakariya University, Pakistan",
+                "period": "GPA: 3.52",
+                "detail": "Key Subjects: Plant Ecology I & II, Biodiversity & Conservation, Plant Taxonomy, Plant Physiology, Environmental Biology, Plant Anatomy, Molecular Biology, Genetics, Mycology & Plant Pathology, Phycology & Bryology, Biostatistics"
+            }
+        ],
+        "publication": "Farid, A., et al. (2023). Impact of Rhizospheric Nodulation and Soil Microbiome on Soybean and Rice Growth for Sustainable Agriculture. Asian Soil Journal.",
+        "projects": [
+            {
+                "icon": "leaf",
+                "name": "Threatened Flora Protection",
+                "description": "Successfully identified and demarcated populations of Grevillea juniperina and other threatened species prior to vegetation clearing, ensuring compliance and conservation."
+            },
+            {
+                "icon": "target",
+                "name": "Weed Management & Habitat Restoration",
+                "description": "Reduced priority weed cover and restored degraded areas through targeted control, native planting and erosion control, improving habitat quality and biodiversity."
+            },
+            {
+                "icon": "pin",
+                "name": "Field Surveys & Data Collection",
+                "description": "Conducted flora surveys, vegetation assessments and habitat surveys across multiple sites using GPS, Survey123 and ArcGIS for accurate mapping and reporting."
+            },
+            {
+                "icon": "users",
+                "name": "Client & Stakeholder Engagement",
+                "description": "Liaised with clients, land managers and site supervisors to communicate findings, provide recommendations and ensure successful delivery of ecological outcomes."
             }
         ],
         "skills": {
@@ -73,6 +121,7 @@
                 "Habitat Restoration",
                 "Ecological Monitoring",
                 "Quadrat & Transect Surveys",
+                "Native & Invasive Plants",
                 "Seed Collection & Propagation",
                 "Herbicide Application",
                 "Fauna Habitat Assessment"
@@ -93,66 +142,39 @@
                 "Python",
                 "Google Workspace",
                 "MS Office Suite"
-            ],
-            "Licences & Certifications": [
-                "Construction White Card",
-                "Full Australian Driver Licence",
-                "LR/HR Licence (Manual)",
-                "First Aid Certificate",
-                "VETASSESS Skills Assessment - Botanist",
-                "Herbicide & Brushcutter Training",
-                "WHS Induction & Safety Awareness"
-            ],
-            "Professional Memberships": [
-                "Australian Plant Society",
-                "Australasian Systematic Botany Society",
-                "Ecological Society of Australia",
-                "Botanical Society of Pakistan",
-                "Associate Member - CIEEM"
             ]
         },
-        "projects": [
-            {
-                "name": "Threatened Flora Protection",
-                "description": "Successfully identified and demarcated populations of Grevillea juniperina and other threatened species prior to vegetation clearing, ensuring regulatory compliance and conservation of key habitats.",
-                "tech": ["Threatened Flora", "Field Identification", "Compliance"],
-                "highlight": true
-            },
-            {
-                "name": "Weed Management & Habitat Restoration",
-                "description": "Reduced priority weed cover and restored degraded areas through targeted control, native planting and erosion control works, improving habitat quality and biodiversity.",
-                "tech": ["Weed Control", "Revegetation", "Erosion Control"]
-            },
-            {
-                "name": "Field Surveys & Data Collection",
-                "description": "Conducted flora surveys, vegetation assessments and habitat surveys across multiple sites using GPS, Survey123 and ArcGIS for accurate mapping and reporting.",
-                "tech": ["GPS", "Survey123", "ArcGIS", "Vegetation Assessment"]
-            },
-            {
-                "name": "Peer-Reviewed Publication",
-                "description": "Farid, A., et al. (2023). Impact of Rhizospheric Nodulation and Soil Microbiome on Soybean and Rice Growth for Sustainable Agriculture. Asian Soil Journal.",
-                "tech": ["Research", "Soil Microbiome", "Sustainable Agriculture"]
-            }
+        "licences": [
+            "Construction White Card",
+            "Full Australian Driver Licence (No conditions)",
+            "First Aid Certificate",
+            "LR/HR Licence (Manual)",
+            "Willing to obtain additional training (e.g. ChemCert, Spotter Catcher)"
         ],
-        "education": [
-            {
-                "degree": "Master of Biotechnology",
-                "school": "Macquarie University, Australia",
-                "period": "2023 - Expected Dec 2026",
-                "detail": "Biotechnology, Molecular Biology, Environmental Applications, Research Methods"
-            },
-            {
-                "degree": "BSc (Honours) - Botany",
-                "school": "Bahauddin Zakariya University, Pakistan",
-                "period": "GPA: 3.52",
-                "detail": "Plant Ecology, Biodiversity & Conservation, Plant Taxonomy, Plant Physiology, Mycology & Plant Pathology, Biostatistics"
-            }
+        "certifications": [
+            "Positive VETASSESS Skills Assessment – Botanist",
+            "Internal Herbicide & Brushcutter Training",
+            "WHS Induction & Safety Awareness"
+        ],
+        "memberships": [
+            "Australian Plant Society",
+            "Australasian Systematic Botany Society",
+            "Ecological Society of Australia",
+            "Botanical Society of Pakistan",
+            "Associate Member – CIEEM"
         ],
         "contact": {
-            "email": "aqibfareex@gmail.com",
             "phone": "0468 993 675",
-            "location": "Dubbo, NSW 2830 · Available across Central West NSW",
+            "email": "aqibfareex@gmail.com",
+            "location": "Dubbo, NSW 2830",
+            "travel": "Willing to travel across Central West NSW",
+            "vehicle": "Full Australian Driver Licence · Own vehicle",
             "linkedin": "linkedin.com/in/aqibfarid"
+        },
+        "footer": {
+            "based": "Based in Dubbo, NSW · Available for work across Central West NSW",
+            "note": "Self-motivated, safety-focused and passionate about ecology and conservation.",
+            "motto": "Protecting biodiversity. Restoring landscapes. Creating impact."
         }
     }
 }
