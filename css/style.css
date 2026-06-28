@@ -278,13 +278,33 @@ svg { stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; 
 .foot-motto { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; font-style: italic; color: var(--green); }
 
 /* ===== Section glow (jump highlight) ===== */
-.glow-highlight {
-    border-radius: var(--radius);
-    animation: sectionGlow 5s ease-out forwards;
+/* Overlay-based so it never conflicts with a section's own entrance
+   animation and works in both the light content and the dark sidebar. */
+#sec-profile, #sec-strengths, #sec-experience, #sec-education,
+#sec-publication, #sec-projects, #sec-memberships { scroll-margin-top: 80px; }
+
+.glow-highlight { position: relative; }
+.glow-highlight::after {
+    content: '';
+    position: absolute;
+    inset: -10px -14px;
+    border-radius: 14px;
+    pointer-events: none;
+    z-index: 5;
+    border: 1.5px solid var(--glow);
+    background: radial-gradient(120% 120% at 50% 0%, rgba(95,211,151,0.16), rgba(95,211,151,0.04) 55%, transparent 75%);
+    box-shadow: 0 0 0 4px rgba(95,211,151,0.18), 0 0 26px 4px rgba(95,211,151,0.40);
+    opacity: 0;
+    animation: glowPulse 5s ease-out forwards;
 }
-@keyframes sectionGlow {
-    0%   { box-shadow: 0 0 0 2px var(--glow), 0 0 22px 6px rgba(95,211,151,0.55); }
-    100% { box-shadow: 0 0 0 0 rgba(95,211,151,0), 0 0 0 0 rgba(95,211,151,0); }
+/* Sidebar sits inside an overflow-clipped sheet — keep the ring tight to the edge */
+#sec-memberships.glow-highlight::after { inset: -8px -6px; }
+
+@keyframes glowPulse {
+    0%   { opacity: 0; transform: scale(1.015); }
+    10%  { opacity: 1; transform: scale(1); }
+    55%  { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1); }
 }
 
 /* ===== Scroll-to-top ===== */
