@@ -1,25 +1,18 @@
 class ResumeApp {
     constructor() {
-        this.resumes = {};
-        this.currentRole = null;
-        this.typewriterTimer = null;
-        this.toastTimer = null;
         this.serverConfig = { default_resume: '', hidden_resumes: [] };
         this.init();
     }
 
     async init() {
         await this.loadServerConfig();
-        await this.loadResumes();
+        const data = await this.loadResume();
+        if (data) this.render(data);
         this.setupDarkMode();
-        this.setupScrollBehavior();
-        this.setupScrollAnimations();
-        this.setupSectionNav();
-        this.loadFromHash();
-        window.addEventListener('hashchange', () => this.loadFromHash());
-        window.addEventListener('beforeprint', () => this.completeTypewriter());
+        this.setupScrollTop();
     }
 
+    // ----- Data -----
     async loadServerConfig() {
         if (window.location.protocol === 'file:') return;
         try {
@@ -28,369 +21,197 @@ class ResumeApp {
         } catch (_) {}
     }
 
-    filterResumes(all) {
-        const hidden = new Set(this.serverConfig.hidden_resumes || []);
-        return Object.fromEntries(Object.entries(all).filter(([key]) => !hidden.has(key)));
-    }
-
-    async loadResumes() {
+    async loadResume() {
         let all = {};
         try {
             if (window.location.protocol === 'file:') {
                 all = window.RESUME_DATA || {};
             } else {
                 const res = await fetch('data/resumes.json', { cache: 'no-store' });
-                if (!res.ok) throw new Error(`Resume data request failed with ${res.status}`);
-                all = await res.json();
+                all = res.ok ? await res.json() : (window.RESUME_DATA || {});
             }
-        } catch (e) {
-            console.error('Could not load resumes.json', e);
-            all = window.RESUME_DATA || {};
-        }
-        this.resumes = this.filterResumes(all);
-        this.renderRolePills();
+        } catch (_) { all = window.RESUME_DATA || {}; }
+
+        const hidden = new Set(this.serverConfig.hidden_resumes || []);
+        const keys = Object.keys(all).filter(k => !hidden.has(k));
+        if (!keys.length) return null;
+        const def = this.serverConfig.default_resume;
+        const key = (def && keys.includes(def)) ? def : keys[0];
+        return all[key];
     }
 
-    loadFromHash() {
-        const hash       = window.location.hash.slice(1);
-        const roles      = Object.keys(this.resumes);
-        if (!roles.length) return;
-        const serverDefault = this.serverConfig.default_resume || '';
-        let role;
-        if (hash && roles.includes(hash))                 role = hash;
-        else if (serverDefault && roles.includes(serverDefault)) role = serverDefault;
-        else                                              role = roles[0];
-        this.switchRole(role);
+    // ----- Helpers -----
+    icon(name) { return `<svg aria-hidden="true"><use href="#i-${name}"></use></svg>`; }
+
+    normalizeUrl(u) {
+        if (!u) return '#';
+        return /^https?:\/\//i.test(u) ? u : 'https://' + u.replace(/^\/+/, '');
     }
+    phoneHref(p) { return (p || '').replace(/[^0-9+]/g, ''); }
+    esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 
-    renderRolePills() {
-        const container = document.getElementById('role-pills');
-        if (!container) return;
-        container.innerHTML = '';
-        Object.entries(this.resumes).forEach(([key, data]) => {
-            const btn = document.createElement('button');
-            btn.className = 'role-pill';
-            btn.textContent = data.title;
-            btn.dataset.role = key;
-            btn.addEventListener('click', () => { window.location.hash = key; });
-            container.appendChild(btn);
-        });
-    }
+    set(id, html) { const el = document.getElementById(id); if (el) el.innerHTML = html; }
 
-    switchRole(role) {
-        if (role === this.currentRole) return;
-        this.currentRole = role;
+    // ----- Render -----
+    render(d) {
+        document.title = `${d.name} | ${d.title}`;
 
-        document.querySelectorAll('.role-pill').forEach(p => {
-            p.classList.toggle('active', p.dataset.role === role);
-        });
-
-        const fadeEls = [document.getElementById('layout'), document.getElementById('stats-row')];
-        fadeEls.forEach(el => { if (el) el.style.opacity = '0'; });
-
-        setTimeout(() => {
-            this.renderResume(this.resumes[role]);
-            fadeEls.forEach(el => { if (el) el.style.opacity = '1'; });
-            setTimeout(() => this.triggerVisibleAnimations(), 60);
-        }, 180);
-    }
-
-    renderResume(data) {
-        if (!data) return;
-
-        const name = data.name || 'Aqib';
-        document.title = `${name} | ${data.title}`;
-
-        // Avatar initials
-        const avatar = document.getElementById('hero-avatar');
-        if (avatar) {
-            const initials = name.split(' ').map(p => p[0]).join('').slice(0, 2).toUpperCase();
-            avatar.textContent = initials;
+        // Brand
+        if (d.brand) {
+            this.set('brand-name', this.esc(d.brand.name || d.name));
+            this.set('brand-tag', this.esc(d.brand.tagline || ''));
         }
 
-        document.getElementById('hero-name').textContent = name;
-        document.getElementById('hero-role-badge').textContent = data.title;
-        document.getElementById('hero-tagline').textContent = data.tagline || '';
-        this.typewrite(document.getElementById('hero-title'), data.subtitle || data.title);
-        this.renderHeroLinks(data.contact || {});
-        this.renderStats(data.stats || []);
-        this.renderSkills(data.skills || {});
-        this.renderEducation(data.education || []);
-        this.renderContact(data.contact || {});
-        document.getElementById('summary-content').textContent = data.summary || '';
-        this.renderExperience(data.experience || []);
-        this.renderProjects(data.projects || []);
-    }
+        // Masthead
+        this.set('name', this.esc(d.name || ''));
+        this.set('title', this.esc(d.title || ''));
+        this.set('roles', (d.roles || []).map(r =>
+            `<span class="role-chip">${this.icon('leaf')}${this.esc(r)}</span>`).join(''));
 
-    renderHeroLinks(contact) {
-        const container = document.getElementById('hero-links');
-        const links = [
-            contact.email    && { href: `mailto:${contact.email}`,                  text: `&#9993; ${contact.email}` },
-            contact.phone    && { href: `tel:${this.phoneHref(contact.phone)}`,      text: `&#9742; ${contact.phone}` },
-            contact.website  && { href: this.normalizeUrl(contact.website),  blank: true, text: '&#9737; Website' },
-            contact.github   && { href: this.normalizeUrl(contact.github),   blank: true, text: '&#8984; GitHub' },
-            contact.linkedin && { href: this.normalizeUrl(contact.linkedin), blank: true, text: '&#9734; LinkedIn' },
-        ].filter(Boolean);
+        this.renderStats(d.stats || []);
+        this.set('profile-content', this.esc(d.profile || ''));
+        this.renderStrengths(d.strengths || []);
+        this.renderExperience(d.experience || []);
+        this.renderEducation(d.education || []);
+        this.renderPublication(d.publication);
+        this.renderProjects(d.projects || []);
 
-        container.innerHTML = links.map(l =>
-            `<a href="${l.href}" class="hero-link"${l.blank ? ' target="_blank" rel="noopener noreferrer"' : ''}>${l.text}</a>`
-        ).join('');
+        // Sidebar
+        this.renderContact(d.contact || {});
+        this.renderCheckList('licences-content', d.licences || []);
+        this.renderCheckList('certs-content', d.certifications || []);
+        this.renderSkills(d.skills || {});
+        this.set('memberships-content', (d.memberships || []).map(m =>
+            `<li>${this.esc(m)}</li>`).join(''));
+
+        // Footer
+        const f = d.footer || {};
+        this.set('foot-based', this.esc(f.based || ''));
+        this.set('foot-note', this.esc(f.note || ''));
+        this.set('foot-motto', this.esc(f.motto || ''));
     }
 
     renderStats(stats) {
-        const grid = document.getElementById('stats-grid');
-        grid.innerHTML = stats.map(s => `
-            <div class="stat-item">
-                ${s.icon ? `<span class="stat-icon">${s.icon}</span>` : ''}
-                <span class="stat-value" data-target="${s.value}">${s.value}</span>
-                <span class="stat-label">${s.label}</span>
-            </div>
-        `).join('');
-        this.animateCounters();
-    }
+        this.set('stats-row', stats.map(s => `
+            <button class="stat" data-target="${this.esc(s.target || '')}" type="button">
+                <span class="stat-value">${this.esc(s.value)}</span>
+                <span class="stat-label">${this.esc(s.label)}</span>
+            </button>`).join(''));
 
-    animateCounters() {
-        const easeOutQuart = t => 1 - Math.pow(1 - t, 4);
-        document.querySelectorAll('.stat-value').forEach(el => {
-            const raw = el.dataset.target;
-            const num = parseInt(raw);
-            if (isNaN(num)) return;
-            const suffix = raw.replace(/[0-9]/g, '');
-            const duration = 1300;
-            const start = performance.now();
-            const tick = now => {
-                const t = Math.min((now - start) / duration, 1);
-                el.textContent = Math.floor(easeOutQuart(t) * num) + suffix;
-                if (t < 1) requestAnimationFrame(tick);
-            };
-            requestAnimationFrame(tick);
+        document.querySelectorAll('.stat').forEach(btn => {
+            btn.addEventListener('click', () => this.jumpTo(btn.dataset.target));
         });
     }
 
-    renderSkills(skills) {
-        const container = document.getElementById('skills-content');
-        if (Array.isArray(skills)) {
-            container.innerHTML = `<div class="skill-tags">${skills.map(s => `<span class="skill-tag">${s}</span>`).join('')}</div>`;
-        } else {
-            container.innerHTML = Object.entries(skills).map(([group, tags]) => `
-                <div class="skill-group">
-                    <div class="skill-group-name">${group}</div>
-                    <div class="skill-tags">${tags.map(t => `<span class="skill-tag">${t}</span>`).join('')}</div>
+    renderStrengths(items) {
+        this.set('strengths-content', items.map(s => `
+            <div class="strength">
+                <div class="strength-ic">${this.icon(s.icon || 'leaf')}</div>
+                <div class="strength-title">${this.esc(s.title)}</div>
+                <div class="strength-text">${this.esc(s.text)}</div>
+            </div>`).join(''));
+    }
+
+    renderExperience(items) {
+        this.set('experience-content', items.map(x => `
+            <div class="xp-item">
+                <div class="xp-node">${this.icon(x.icon || 'leaf')}</div>
+                <div class="xp-head">
+                    <div class="xp-role">${this.esc(x.role)}</div>
+                    <div class="xp-meta">${this.esc(x.period || '')}${x.location ? `<br>${this.esc(x.location)}` : ''}</div>
                 </div>
-            `).join('');
-        }
+                <div class="xp-company">${this.esc(x.company)}</div>
+                <ul class="xp-bullets">${(x.highlights || []).map(h => `<li>${this.esc(h)}</li>`).join('')}</ul>
+            </div>`).join(''));
     }
 
-    staggerSkillTags(card) {
-        const tags = [...card.querySelectorAll('.skill-tag:not(.visible)')];
-        tags.forEach((tag, i) => {
-            tag.style.transitionDelay = `${i * 38}ms`;
-        });
-        requestAnimationFrame(() => {
-            tags.forEach(tag => tag.classList.add('visible'));
-        });
-        // Clear delays after animations finish so hover is instant
-        const clearDelay = tags.length * 38 + 350;
-        setTimeout(() => tags.forEach(tag => { tag.style.transitionDelay = ''; }), clearDelay);
-    }
-
-    renderEducation(education) {
-        const container = document.getElementById('education-content');
-        container.innerHTML = education.map(edu => {
-            if (typeof edu === 'string') return `<div class="edu-item"><div class="edu-degree">${edu}</div></div>`;
-            return `
-                <div class="edu-item">
-                    <div class="edu-degree">${edu.degree}</div>
-                    ${edu.school  ? `<div class="edu-school">${edu.school}</div>`    : ''}
-                    ${edu.period  ? `<div class="edu-period">${edu.period}</div>`    : ''}
-                    ${edu.detail  ? `<div class="edu-detail">${edu.detail}</div>`    : ''}
+    renderEducation(items) {
+        this.set('education-content', items.map(e => `
+            <div class="edu-item">
+                <div class="edu-top">
+                    <div class="edu-degree">${this.esc(e.degree)}</div>
+                    ${e.period ? `<div class="edu-period">${this.esc(e.period)}</div>` : ''}
                 </div>
-            `;
-        }).join('');
+                ${e.school ? `<div class="edu-school">${this.esc(e.school)}</div>` : ''}
+                ${e.detail ? `<div class="edu-detail">${this.esc(e.detail)}</div>` : ''}
+            </div>`).join(''));
     }
 
-    renderContact(contact) {
-        const container = document.getElementById('contact-content');
-        const items = [
-            contact.email    && { icon: '&#9993;', href: `mailto:${contact.email}`,               text: contact.email,    copy: contact.email },
-            contact.phone    && { icon: '&#9742;', href: `tel:${this.phoneHref(contact.phone)}`,   text: contact.phone,    copy: contact.phone },
-            contact.location && { icon: '&#9673;',                                                 text: contact.location },
-            contact.website  && { icon: '&#9737;', href: this.normalizeUrl(contact.website),  ext: true, text: contact.website,  copy: contact.website },
-            contact.github   && { icon: '&#8984;', href: this.normalizeUrl(contact.github),   ext: true, text: contact.github,   copy: contact.github },
-            contact.linkedin && { icon: '&#9734;', href: this.normalizeUrl(contact.linkedin), ext: true, text: contact.linkedin, copy: contact.linkedin },
-        ].filter(Boolean);
-
-        container.innerHTML = items.map(item =>
-            item.href
-                ? `<a href="${item.href}" class="contact-item copyable" data-copy="${item.copy || ''}"${item.ext ? ' target="_blank" rel="noopener noreferrer"' : ''}>
-                     <span class="contact-icon">${item.icon}</span>${item.text}
-                   </a>`
-                : `<div class="contact-item"><span class="contact-icon">${item.icon}</span>${item.text}</div>`
-        ).join('');
-
-        container.querySelectorAll('.contact-item.copyable[data-copy]').forEach(el => {
-            el.addEventListener('click', e => {
-                e.preventDefault();
-                const text = el.dataset.copy;
-                if (!text) return;
-                navigator.clipboard.writeText(text)
-                    .then(() => this.showToast(`Copied: ${text}`))
-                    .catch(() => this.showToast('Copy not supported in this browser'));
-            });
-        });
+    renderPublication(pub) {
+        if (!pub) { this.set('publication-content', ''); return; }
+        // Bold the leading author/year portion up to the first sentence end.
+        const m = String(pub).match(/^(.*?\(\d{4}\)\.)\s*(.*)$/);
+        const html = m ? `<b>${this.esc(m[1])}</b> ${this.esc(m[2])}` : this.esc(pub);
+        this.set('publication-content', `<div class="pub-card">${html}</div>`);
     }
 
-    renderExperience(experience) {
-        const container = document.getElementById('experience-content');
-        container.innerHTML = experience.map(exp => {
-            if (typeof exp === 'string') {
-                return `<div class="timeline-item"><div class="timeline-role">${exp}</div></div>`;
-            }
-            return `
-                <div class="timeline-item">
-                    <div class="timeline-header">
-                        <span class="timeline-role">${exp.role}</span>
-                        ${exp.period ? `<span class="timeline-period">${exp.period}</span>` : ''}
-                    </div>
-                    ${exp.company ? `<div class="timeline-company">${exp.company}${exp.location ? ' &middot; ' + exp.location : ''}</div>` : ''}
-                    ${Array.isArray(exp.highlights) ? `
-                        <ul class="timeline-highlights">
-                            ${exp.highlights.map(h => `<li>${h}</li>`).join('')}
-                        </ul>` : ''}
+    renderProjects(items) {
+        this.set('projects-content', items.map(p => `
+            <div class="ach">
+                <div class="ach-ic">${this.icon(p.icon || 'leaf')}</div>
+                <div>
+                    <div class="ach-name">${this.esc(p.name)}</div>
+                    <div class="ach-text">${this.esc(p.description)}</div>
                 </div>
-            `;
-        }).join('');
+            </div>`).join(''));
     }
 
-    renderProjects(projects) {
-        const card = document.getElementById('projects-card');
-        if (!projects || !projects.length) {
-            card.style.display = 'none';
-            return;
-        }
-        card.style.display = '';
-        document.getElementById('projects-content').innerHTML = projects.map(p => `
-            <div class="project-card${p.highlight ? ' featured' : ''}">
-                <div class="project-name">${p.name}</div>
-                <div class="project-desc">${p.description}</div>
-                ${p.tech ? `<div class="project-tech">${p.tech.map(t => `<span class="tech-tag">${t}</span>`).join('')}</div>` : ''}
-                ${p.url ? `<a href="${this.normalizeUrl(p.url)}" class="project-link" target="_blank" rel="noopener noreferrer">View Project &#8599;</a>` : ''}
-            </div>
-        `).join('');
+    renderContact(c) {
+        const rows = [];
+        if (c.phone) rows.push(`<div class="contact-row"><span class="contact-ic">${this.icon('phone')}</span><a href="tel:${this.phoneHref(c.phone)}">${this.esc(c.phone)}</a></div>`);
+        if (c.email) rows.push(`<div class="contact-row"><span class="contact-ic">${this.icon('mail')}</span><a href="mailto:${this.esc(c.email)}">${this.esc(c.email)}</a></div>`);
+        if (c.location) rows.push(`<div class="contact-row"><span class="contact-ic">${this.icon('pin')}</span><span>${this.esc(c.location)}${c.travel ? `<span class="contact-sub">${this.esc(c.travel)}</span>` : ''}</span></div>`);
+        if (c.vehicle) rows.push(`<div class="contact-row"><span class="contact-ic">${this.icon('car')}</span><span>${this.esc(c.vehicle)}</span></div>`);
+        if (c.linkedin) rows.push(`<div class="contact-row"><span class="contact-ic">${this.icon('link')}</span><a href="${this.normalizeUrl(c.linkedin)}" target="_blank" rel="noopener noreferrer">${this.esc(c.linkedin)}</a></div>`);
+        this.set('contact-content', rows.join(''));
     }
 
-    typewrite(el, text) {
-        clearTimeout(this.typewriterTimer);
-        this.typewriterEl   = el;
-        this.typewriterText = text;
-        el.textContent = '';
-        el.classList.remove('typewriter-cursor');
-        let i = 0;
-        const type = () => {
-            if (i < text.length) {
-                el.textContent += text[i++];
-                this.typewriterTimer = setTimeout(type, 35 + Math.random() * 35);
-            } else {
-                el.classList.add('typewriter-cursor');
-            }
-        };
-        setTimeout(type, 250);
+    renderCheckList(id, items) {
+        this.set(id, items.map(i =>
+            `<li><span class="check-ic">${this.icon('check')}</span><span>${this.esc(i)}</span></li>`).join(''));
     }
 
-    // Make sure the printed/downloaded CV always shows the full title,
-    // even if the typewriter animation is still mid-stream.
-    completeTypewriter() {
-        clearTimeout(this.typewriterTimer);
-        if (this.typewriterEl && this.typewriterText != null) {
-            this.typewriterEl.textContent = this.typewriterText;
-            this.typewriterEl.classList.remove('typewriter-cursor');
-        }
+    renderSkills(groups) {
+        const map = { 'Ecology & Field': 'leaf', 'GIS & Spatial': 'map', 'Software & Analysis': 'laptop' };
+        this.set('skills-content', Object.entries(groups).map(([name, items]) => `
+            <div class="skill-group">
+                <div class="skill-group-name">${this.icon(map[name] || 'leaf')}${this.esc(name)}</div>
+                <ul class="mini-list">${items.map(t => `<li>${this.esc(t)}</li>`).join('')}</ul>
+            </div>`).join(''));
     }
 
-    setupScrollBehavior() {
-        const progress = document.getElementById('scroll-progress');
-        const topBtn   = document.getElementById('scroll-top-btn');
-
-        window.addEventListener('scroll', () => {
-            const scrolled  = window.scrollY;
-            const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-            if (progress) progress.style.width = `${maxScroll > 0 ? (scrolled / maxScroll) * 100 : 0}%`;
-            if (topBtn)   topBtn.classList.toggle('visible', scrolled > 300);
-        }, { passive: true });
-
-        topBtn?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    // ----- Jump + glow -----
+    jumpTo(targetId) {
+        const el = document.getElementById(targetId);
+        if (!el) return;
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.classList.remove('glow-highlight');
+        void el.offsetWidth;           // restart animation
+        el.classList.add('glow-highlight');
+        setTimeout(() => el.classList.remove('glow-highlight'), 5100);
     }
 
-    setupSectionNav() {
-        const dots = document.querySelectorAll('.section-dot');
-        if (!dots.length) return;
-
-        const observer = new IntersectionObserver(entries => {
-            entries.forEach(entry => {
-                const dot = document.querySelector(`.section-dot[data-section="${entry.target.id}"]`);
-                if (dot) dot.classList.toggle('active', entry.isIntersecting);
-            });
-        }, { threshold: 0.35 });
-
-        dots.forEach(dot => {
-            const section = document.getElementById(dot.dataset.section);
-            if (section) observer.observe(section);
-            dot.addEventListener('click', () => {
-                section?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            });
-        });
-    }
-
-    showToast(msg) {
-        clearTimeout(this.toastTimer);
-        const toast = document.getElementById('toast');
-        if (!toast) return;
-        toast.textContent = msg;
-        toast.classList.add('show');
-        this.toastTimer = setTimeout(() => toast.classList.remove('show'), 2300);
-    }
-
-    setupScrollAnimations() {
-        const observer = new IntersectionObserver(entries => {
-            entries.forEach(e => {
-                if (e.isIntersecting) {
-                    e.target.classList.add('visible');
-                    if (e.target.id === 'skills-card') this.staggerSkillTags(e.target);
-                }
-            });
-        }, { threshold: 0.08 });
-        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-    }
-
-    triggerVisibleAnimations() {
-        document.querySelectorAll('.fade-in').forEach(el => {
-            if (el.getBoundingClientRect().top < window.innerHeight) {
-                el.classList.add('visible');
-                if (el.id === 'skills-card') this.staggerSkillTags(el);
-            }
-        });
-    }
-
+    // ----- Dark mode -----
     setupDarkMode() {
-        const toggle = document.getElementById('dark-toggle');
+        const btn = document.getElementById('dark-toggle');
         const apply = theme => {
             document.documentElement.dataset.theme = theme;
-            toggle.innerHTML = theme === 'dark' ? '&#9728;' : '&#9681;';
+            if (btn) btn.innerHTML = theme === 'dark' ? '&#9728;' : '&#9680;';
             localStorage.setItem('theme', theme);
         };
         apply(localStorage.getItem('theme') || 'light');
-        toggle.addEventListener('click', () => {
-            apply(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark');
-        });
+        btn?.addEventListener('click', () =>
+            apply(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'));
     }
 
-    normalizeUrl(value) {
-        if (!value) return '';
-        return /^https?:\/\//i.test(value) ? value : `https://${value}`;
-    }
-
-    phoneHref(value) {
-        return String(value || '').replace(/[^\d+]/g, '');
+    // ----- Scroll to top -----
+    setupScrollTop() {
+        const btn = document.getElementById('scroll-top-btn');
+        if (!btn) return;
+        window.addEventListener('scroll', () => {
+            btn.classList.toggle('visible', window.scrollY > 300);
+        }, { passive: true });
+        btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
     }
 }
 
