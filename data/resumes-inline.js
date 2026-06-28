@@ -1,10 +1,10 @@
 window.RESUME_DATA = {
     "ecologist": {
-        "brand": { "name": "East Coast", "tagline": "Ecology Focused" },
+        "brand": { "name": "Aqib Farid", "tagline": "Ecology · Botany · Restoration" },
         "name": "Aqib Farid",
         "title": "Project Ecologist | Botanist | Bush Regenerator",
         "roles": ["Field Ecologist", "Plant Conservationist", "Environmental Researcher"],
-        "profile": "Botanist and Ecologist with 4+ years of combined experience in ecological fieldwork, bush regeneration, flora surveys, threatened species conservation and environmental research. Skilled in identifying threatened flora, priority weeds and fauna habitat, conducting ecological assessments, and using GPS-enabled tablets and GIS to collect and manage field data. Passionate about delivering high-quality ecological outcomes while maintaining strong safety standards and effective client communication. Based in Central West NSW and committed to contributing to East Coast Ecology's impactful work.",
+        "profile": "Botanist and Ecologist with 4+ years of combined experience in ecological fieldwork, bush regeneration, flora surveys, threatened species conservation and environmental research. Skilled in identifying threatened flora, priority weeds and fauna habitat, conducting ecological assessments, and using GPS-enabled tablets and GIS to collect and manage field data. Passionate about delivering high-quality ecological outcomes while maintaining strong safety standards and effective client communication. Based in Central West NSW and committed to contributing to impactful conservation and restoration work.",
         "stats": [
             { "label": "Years Exp.", "value": "4+", "target": "sec-experience" },
             { "label": "Field Roles", "value": "4", "target": "sec-experience" },
