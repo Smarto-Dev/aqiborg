@@ -1,268 +1,159 @@
 window.RESUME_DATA = {
-    "it-resume": {
+    "ecologist": {
         "name": "Aqib Farid",
-        "title": "Cloud & Backend Engineer",
-        "subtitle": "Technology-Focused Cloud & Backend Engineer",
-        "tagline": "AWS infrastructure, scalable backend systems, reliability, security, and delivery leadership",
+        "title": "Project Ecologist | Botanist | Bush Regenerator",
+        "subtitle": "Field Ecologist · Plant Conservationist · Environmental Researcher",
+        "tagline": "Flora surveys, threatened species conservation, bush regeneration, and ecological field research",
         "stats": [
-            { "label": "Years Exp.", "value": "7+", "icon": "\ud83d\udcc5" },
-            { "label": "Team Led", "value": "6", "icon": "\ud83d\udc65" },
-            { "label": "Users Supported", "value": "10K+", "icon": "\u26a1" },
-            { "label": "AWS Certified", "value": "SAA", "icon": "\u2601" }
+            { "label": "Years Exp.", "value": "4+", "icon": "🌿" },
+            { "label": "Field Roles", "value": "4", "icon": "🌱" },
+            { "label": "Memberships", "value": "5", "icon": "🤝" },
+            { "label": "Publication", "value": "1", "icon": "📄" }
         ],
-        "summary": "Technology-focused Cloud & Backend Engineer with 7+ years of experience leading teams, building scalable cloud-based systems, and managing production environments. Strong background in AWS infrastructure, system reliability, security best practices, and stakeholder collaboration. Proven ability to deliver end-to-end solutions, optimise costs, and improve operational efficiency across diverse environments.",
+        "summary": "Botanist and Ecologist with 4+ years of combined experience in ecological fieldwork, bush regeneration, flora surveys, threatened species conservation and environmental research. Skilled in identifying threatened flora, priority weeds and fauna habitat, conducting ecological assessments, and using GPS-enabled tablets and GIS to collect and manage field data. Passionate about delivering high-quality ecological outcomes while maintaining strong safety standards and effective client communication. Based in Central West NSW and committed to contributing to impactful conservation work.",
         "experience": [
             {
-                "role": "Cloud & Backend Engineer / Team Lead",
-                "company": "Smart Concepts 721",
-                "period": "Feb 2025 - Present",
-                "location": "Sydney, Australia",
+                "role": "Bush Regenerator / Ecological Restoration Crew",
+                "company": "Total Earth Care",
+                "period": "May 2026 - Present",
+                "location": "Penrith & Northern Beaches, NSW",
                 "highlights": [
-                    "Led a cross-functional team of 4 developers and 2 designers, managing task allocation, delivery timelines, and quality.",
-                    "Designed and maintained AWS-based infrastructure using VPC, EC2, Lambda, and API Gateway across production and staging environments.",
-                    "Optimised cloud costs by evaluating services and managing resource utilisation based on performance and budget requirements.",
-                    "Implemented security practices including MFA, IAM policies, and secure configurations aligned with industry standards.",
-                    "Monitored system performance using CloudWatch and logs, proactively resolving issues.",
-                    "Handled production incidents, coordinating fixes across systems and team members under time pressure.",
-                    "Collaborated with stakeholders to translate business requirements into scalable technical solutions."
+                    "Conduct ecological restoration and bush regeneration across multiple council and private sites.",
+                    "Identify and protect threatened flora including Grevillea juniperina and pencil orchids during works.",
+                    "Undertake priority weed control (glyphosate, foliar spraying, cut-and-paint) to improve vegetation condition.",
+                    "Collect native seed, propagate plants and deliver habitat restoration and erosion control works.",
+                    "Monitor vegetation response and record data using GPS-enabled tablets and Survey123.",
+                    "Collaborate with project leads and clients to ensure works meet ecological and WHS standards."
                 ]
             },
             {
-                "role": "Cloud & Backend Engineer",
-                "company": "Quran Cube",
-                "period": "Jan 2023 - Feb 2025",
-                "location": "Remote",
+                "role": "Botanist (Volunteer)",
+                "company": "Taronga Conservation Society Australia",
+                "period": "Jul 2025 - Apr 2026",
+                "location": "Mosman, NSW",
                 "highlights": [
-                    "Designed and implemented scalable backend systems supporting 10K+ users.",
-                    "Contributed to technology planning and budgeting decisions, balancing cost and performance.",
-                    "Improved system performance by approximately 25-30% through optimisation and efficient architecture.",
-                    "Implemented secure authentication and data handling mechanisms.",
-                    "Delivered features end-to-end from design to deployment."
+                    "Assisted in native plant collections and conservation programs at Taronga Zoo.",
+                    "Identified native and threatened flora including Grevillea exalata and assisted with habitat restoration.",
+                    "Monitored plant health and supported horticultural specialists with management of native collections.",
+                    "Applied botanical knowledge to contribute to in-situ and ex-situ conservation outcomes."
                 ]
             },
             {
-                "role": "Cloud Engineer / Backend Developer",
-                "company": "AiP Defense",
-                "period": "Feb 2021 - Dec 2022",
-                "location": "Remote",
-                "highlights": [
-                    "Built and maintained cloud-based systems handling 8K-15K+ API requests per day.",
-                    "Improved API performance and system reliability by approximately 30-40%.",
-                    "Contributed to scalable system design and architecture decisions.",
-                    "Resolved production issues, reducing system failures by approximately 25-30%.",
-                    "Implemented event-driven processing for scalable workloads."
-                ]
-            },
-            {
-                "role": "Cloud Engineer",
-                "company": "Multiple Clients",
-                "period": "Feb 2021 - Aug 2022",
-                "location": "Freelance / Contract",
-                "highlights": [
-                    "Delivered backend and cloud solutions across multiple projects using AWS.",
-                    "Designed systems supporting 1K-5K users per month.",
-                    "Implemented authentication and access control using AWS Cognito and IAM.",
-                    "Improved performance and reduced latency by approximately 20-30%.",
-                    "Managed multiple projects with consistent delivery and client satisfaction."
-                ]
-            },
-            {
-                "role": "Software Engineer",
-                "company": "Technology4Seniors (CA)",
-                "period": "Jan 2020 - Dec 2020",
-                "location": "Remote",
-                "highlights": [
-                    "Contributed to IT governance practices, including documentation of systems and workflows.",
-                    "Improved team processes and standardised development practices.",
-                    "Supported secure and reliable cloud-based system implementation.",
-                    "Enhanced system performance and stability."
-                ]
-            },
-            {
-                "role": "Software Engineer",
-                "company": "EIVA (AI Solution)",
-                "period": "Jan 2018 - Jan 2020",
-                "location": "Remote",
-                "highlights": [
-                    "Supported infrastructure setup and management for cloud-based applications.",
-                    "Developed backend services and APIs for AI-driven systems.",
-                    "Improved system stability and reliability through debugging and testing.",
-                    "Assisted in maintaining production environments."
-                ]
-            }
-        ],
-        "skills": {
-            "Cloud & Infrastructure": [
-                "AWS Infrastructure",
-                "VPC",
-                "EC2",
-                "Lambda",
-                "API Gateway",
-                "CloudWatch"
-            ],
-            "Systems & Reliability": [
-                "System Design",
-                "Distributed Systems",
-                "Production Environments",
-                "Incident Management",
-                "Performance Optimisation"
-            ],
-            "Security & Governance": [
-                "MFA",
-                "IAM",
-                "Logging",
-                "Access Control",
-                "Process Improvement",
-                "Governance"
-            ],
-            "Leadership & Delivery": [
-                "Team Leadership",
-                "Delivery Management",
-                "Stakeholder Communication",
-                "Requirements Translation",
-                "Cost Optimisation",
-                "Budget Awareness"
-            ]
-        },
-        "projects": [
-            {
-                "name": "Cloud-Based Scalable System (URL Shortener)",
-                "description": "Designed a scalable URL shortener architecture handling 50K+ simulated requests per day, with caching that reduced database load by approximately 60%, fault-tolerant APIs, low latency under 100ms, and documented scaling strategy.",
-                "tech": ["AWS", "Caching", "API Design", "Scalable Architecture"],
-                "highlight": true
-            }
-        ],
-        "education": [
-            {
-                "degree": "AWS Certified Solutions Architect - Associate",
-                "school": "Amazon Web Services",
-                "detail": "Certification"
-            },
-            {
-                "degree": "MS Biotechnology",
-                "school": "Macquarie University, Sydney",
-                "period": "2023 - 2025"
-            },
-            {
-                "degree": "BS Botany",
-                "school": "Bahauddin Zakariya University"
-            }
-        ],
-        "contact": {
-            "email": "me@aqib.org",
-            "phone": "+61 468 993 675",
-            "location": "Sydney, Australia",
-            "website": "www.aqib.org",
-            "github": "github.com/Smarto-Dev"
-        }
-    },
-    "botanist": {
-        "name": "Aqib Farid",
-        "title": "Botanist & Plant Scientist",
-        "subtitle": "Plant Biology & Biotechnology Researcher",
-        "tagline": "Plant systematics, molecular biotechnology, biodiversity research, and environmental science",
-        "stats": [
-            { "label": "Research Yrs", "value": "7+", "icon": "🌿" },
-            { "label": "Degrees", "value": "2", "icon": "🎓" },
-            { "label": "Specimens", "value": "100+", "icon": "🔬" },
-            { "label": "Field Studies", "value": "4", "icon": "🌱" }
-        ],
-        "summary": "Botanist and plant scientist with a Bachelor of Science in Botany and a Master of Science in Biotechnology from Macquarie University, Sydney. Experienced in plant taxonomy, herbarium curation, field research, and molecular laboratory techniques. Combines a strong foundation in plant systematics and ecology with applied biotechnology skills including tissue culture, DNA analysis, and molecular biology. Passionate about biodiversity conservation, sustainable agriculture, and plant-based research.",
-        "experience": [
-            {
-                "role": "Graduate Researcher – Plant Biotechnology",
-                "company": "Macquarie University",
-                "period": "2023 - 2025",
-                "location": "Sydney, Australia",
-                "highlights": [
-                    "Conducted graduate research in plant biotechnology as part of MS Biotechnology programme.",
-                    "Applied molecular techniques including DNA extraction, PCR, and gel electrophoresis to study plant biology.",
-                    "Performed plant tissue culture experiments and maintained sterile lab environments.",
-                    "Analysed experimental data and contributed to academic reports and research presentations.",
-                    "Collaborated with research supervisors and peers on study design, methodology, and interpretation of results.",
-                    "Maintained detailed laboratory records and followed institutional biosafety protocols."
-                ]
-            },
-            {
-                "role": "Botanical Field Researcher & Lab Assistant",
-                "company": "Bahauddin Zakariya University",
-                "period": "2014 - 2018",
+                "role": "Plant Physiologist (Research Scientist)",
+                "company": "Ittefaq Chemicals Group",
+                "period": "Jun 2022 - Dec 2022 · Jan 2024 - Jul 2024",
                 "location": "Pakistan",
                 "highlights": [
-                    "Conducted systematic field surveys for plant species identification, collection, and documentation.",
-                    "Prepared and maintained a collection of 100+ pressed herbarium specimens with accurate taxonomic labelling.",
-                    "Studied plant morphology, anatomy, and ecology through structured coursework and independent fieldwork.",
-                    "Performed microscopy and botanical dissections for anatomical and histological analysis.",
-                    "Assisted in teaching laboratory sessions and supporting junior students with plant identification exercises.",
-                    "Contributed to research on regional plant biodiversity, ethnobotany, and conservation status."
+                    "Designed and implemented lab, greenhouse and field experiments on soil-plant-microbe interactions.",
+                    "Evaluated plant responses to environmental stress across various soil and climatic conditions.",
+                    "Analysed data using R and SAS to generate insights for sustainable plant management.",
+                    "Produced comprehensive technical reports and presented findings to senior management.",
+                    "Applied molecular techniques (PCR, microscopy) to study plant health and disease resistance."
+                ]
+            },
+            {
+                "role": "Research Assistant (Plant Sciences)",
+                "company": "TOPSUN Group",
+                "period": "Jul 2020 - May 2022",
+                "location": "Pakistan",
+                "highlights": [
+                    "Conducted experiments on soil microbiota and plant stress tolerance for sustainable agriculture.",
+                    "Assisted in field trials, data collection and lab analysis for multidisciplinary plant science projects.",
+                    "Co-authored a peer-reviewed publication in the Asian Soil Journal."
                 ]
             }
         ],
         "skills": {
-            "Plant Science": [
-                "Plant Taxonomy",
-                "Plant Morphology",
-                "Plant Ecology",
-                "Ethnobotany",
-                "Herbarium Curation",
-                "Field Identification"
+            "Ecology & Field": [
+                "Flora Identification",
+                "Threatened Flora & Fauna",
+                "Priority Weed Identification",
+                "Vegetation Assessment",
+                "Bush Regeneration",
+                "Habitat Restoration",
+                "Ecological Monitoring",
+                "Quadrat & Transect Surveys",
+                "Seed Collection & Propagation",
+                "Herbicide Application",
+                "Fauna Habitat Assessment"
             ],
-            "Biotechnology & Lab": [
-                "Tissue Culture",
-                "DNA Extraction",
-                "PCR & Gel Electrophoresis",
-                "Molecular Biology",
-                "Microscopy",
-                "Spectrophotometry"
+            "GIS & Spatial": [
+                "ArcGIS Pro",
+                "ArcGIS",
+                "QGIS",
+                "Survey123",
+                "TreePlotter",
+                "Google Earth",
+                "GPS Navigation & Data Collection"
             ],
-            "Research & Analysis": [
-                "Field Research Design",
-                "Data Collection",
-                "Statistical Analysis",
-                "Scientific Writing",
-                "Literature Review",
-                "Lab Documentation"
+            "Software & Analysis": [
+                "Microsoft Excel (Advanced)",
+                "R",
+                "SPSS",
+                "Python",
+                "Google Workspace",
+                "MS Office Suite"
             ],
-            "Environmental Science": [
-                "Biodiversity Assessment",
-                "Conservation Biology",
-                "Sustainable Agriculture",
-                "Environmental Monitoring",
-                "GIS (Fundamentals)",
-                "Biosafety Compliance"
+            "Licences & Certifications": [
+                "Construction White Card",
+                "Full Australian Driver Licence",
+                "LR/HR Licence (Manual)",
+                "First Aid Certificate",
+                "VETASSESS Skills Assessment - Botanist",
+                "Herbicide & Brushcutter Training",
+                "WHS Induction & Safety Awareness"
+            ],
+            "Professional Memberships": [
+                "Australian Plant Society",
+                "Australasian Systematic Botany Society",
+                "Ecological Society of Australia",
+                "Botanical Society of Pakistan",
+                "Associate Member - CIEEM"
             ]
         },
         "projects": [
             {
-                "name": "Plant Biotechnology Research – Macquarie University",
-                "description": "Graduate-level research applying molecular biology and biotechnology methods to plant science, including experimental design, tissue culture protocols, DNA-based analysis, and academic reporting as part of MS Biotechnology.",
-                "tech": ["Molecular Biology", "Tissue Culture", "PCR", "Plant Genomics"],
+                "name": "Threatened Flora Protection",
+                "description": "Successfully identified and demarcated populations of Grevillea juniperina and other threatened species prior to vegetation clearing, ensuring regulatory compliance and conservation of key habitats.",
+                "tech": ["Threatened Flora", "Field Identification", "Compliance"],
                 "highlight": true
             },
             {
-                "name": "Regional Herbarium Biodiversity Survey",
-                "description": "Systematic field survey cataloguing local plant species across multiple ecological zones, resulting in a curated herbarium collection of 100+ specimens with full taxonomic and ecological documentation.",
-                "tech": ["Field Research", "Plant Taxonomy", "Herbarium", "Biodiversity Documentation"]
+                "name": "Weed Management & Habitat Restoration",
+                "description": "Reduced priority weed cover and restored degraded areas through targeted control, native planting and erosion control works, improving habitat quality and biodiversity.",
+                "tech": ["Weed Control", "Revegetation", "Erosion Control"]
+            },
+            {
+                "name": "Field Surveys & Data Collection",
+                "description": "Conducted flora surveys, vegetation assessments and habitat surveys across multiple sites using GPS, Survey123 and ArcGIS for accurate mapping and reporting.",
+                "tech": ["GPS", "Survey123", "ArcGIS", "Vegetation Assessment"]
+            },
+            {
+                "name": "Peer-Reviewed Publication",
+                "description": "Farid, A., et al. (2023). Impact of Rhizospheric Nodulation and Soil Microbiome on Soybean and Rice Growth for Sustainable Agriculture. Asian Soil Journal.",
+                "tech": ["Research", "Soil Microbiome", "Sustainable Agriculture"]
             }
         ],
         "education": [
             {
-                "degree": "MS Biotechnology",
-                "school": "Macquarie University, Sydney",
-                "period": "2023 - 2025"
+                "degree": "Master of Biotechnology",
+                "school": "Macquarie University, Australia",
+                "period": "2023 - Expected Dec 2026",
+                "detail": "Biotechnology, Molecular Biology, Environmental Applications, Research Methods"
             },
             {
-                "degree": "BS Botany",
-                "school": "Bahauddin Zakariya University",
-                "period": "2014 - 2018"
+                "degree": "BSc (Honours) - Botany",
+                "school": "Bahauddin Zakariya University, Pakistan",
+                "period": "GPA: 3.52",
+                "detail": "Plant Ecology, Biodiversity & Conservation, Plant Taxonomy, Plant Physiology, Mycology & Plant Pathology, Biostatistics"
             }
         ],
         "contact": {
-            "email": "me@aqib.org",
-            "phone": "+61 468 993 675",
-            "location": "Sydney, Australia",
-            "website": "www.aqib.org",
-            "github": "github.com/Smarto-Dev"
+            "email": "aqibfareex@gmail.com",
+            "phone": "0468 993 675",
+            "location": "Dubbo, NSW 2830 · Available across Central West NSW",
+            "linkedin": "linkedin.com/in/aqibfarid"
         }
     }
-};
+}
+;
