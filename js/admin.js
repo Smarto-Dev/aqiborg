@@ -68,7 +68,7 @@ function getStoredHash() { return localStorage.getItem(ADMIN.HASH_KEY) || ADMIN.
 function isLoggedIn()    { return sessionStorage.getItem(ADMIN.SESSION_KEY) === 'true'; }
 
 // ===== Config API (server-side persistence) =====
-const CONFIG_API = 'api/config.php';
+const CONFIG_API = 'data/config.json';
 
 async function loadConfig() {
     try {
