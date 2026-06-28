@@ -624,51 +624,114 @@ body {
 /* ===== Content Transition ===== */
 #layout, #stats-row { transition: opacity 0.18s ease; }
 
-/* ===== Print ===== */
+/* ===== Print / PDF ===== */
+@page {
+    size: A4;
+    margin: 11mm 12mm;
+}
+
 @media print {
+    /* Force a clean, ink-friendly light palette even if dark mode is on */
+    :root, [data-theme="dark"] {
+        --bg:            #ffffff;
+        --surface:       #ffffff;
+        --surface-2:     #f4faf6;
+        --border:        #c8e6d4;
+        --text:          #162d1e;
+        --text-secondary:#33503f;
+        --text-muted:    #5a7765;
+        --primary:       #2d6a4f;
+        --primary-light: #2f7a59;
+        --accent:        #2d6a4f;
+        --sidebar-bg:    #1a3a28;
+        --sidebar-text:  #f1faf4;
+        --sidebar-muted: rgba(241,250,244,0.78);
+    }
+
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
     .no-print { display: none !important; }
 
-    body { background: white; }
+    html, body {
+        background: #ffffff !important;
+        font-size: 10.5px;
+        line-height: 1.5;
+    }
 
+    /* Compact header band */
     #hero {
-        background: linear-gradient(140deg, #0d2618, #2d6a4f) !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-        padding: 2rem;
+        background: linear-gradient(135deg, #0d2618 0%, #1a3a28 45%, #2d6a4f 100%) !important;
+        padding: 1.5rem 1.75rem !important;
+        animation: none;
+        background-size: auto !important;
+    }
+    #hero::before, #hero::after,
+    .hero-orb, .hero-pattern { display: none !important; }
+    .hero-inner { max-width: 100%; }
+    .hero-avatar { display: none; }
+    #hero-name   { font-size: 1.9rem !important; margin-bottom: 0.25rem; text-shadow: none; }
+    .hero-badge  { margin-bottom: 0.6rem; }
+    .hero-title  { font-size: 0.92rem !important; min-height: 0; margin-bottom: 0.35rem; opacity: 0.95; }
+    .hero-tagline{ font-size: 0.78rem !important; margin-bottom: 0.6rem; opacity: 0.85; }
+    .hero-links  { gap: 0.5rem; }
+    .hero-link {
+        background: rgba(255,255,255,0.14) !important;
+        border: 1px solid rgba(255,255,255,0.3) !important;
+        padding: 0.25rem 0.7rem;
+        font-size: 0.72rem;
     }
 
     #stats-row { display: none; }
 
     #layout {
         display: grid;
-        grid-template-columns: 210px 1fr;
-        gap: 1rem;
+        grid-template-columns: 215px 1fr;
+        gap: 0.9rem;
         margin: 0;
-        padding: 0.75rem;
+        padding: 0.85rem 0 0;
         max-width: 100%;
     }
 
+    /* Keep the dark green sidebar — it's part of the look and reads well in print */
     #sidebar {
         position: static;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
+        box-shadow: none;
+        page-break-inside: avoid;
+        break-inside: avoid;
     }
+    #sidebar .card { padding: 0.9rem 1rem; }
 
     .card {
-        box-shadow: none;
-        border: 1px solid #c8e6d4;
-        margin-bottom: 0.5rem;
+        box-shadow: none !important;
+        margin-bottom: 0.7rem;
+        padding: 0.9rem 1rem;
         page-break-inside: avoid;
-        padding: 1rem;
+        break-inside: avoid;
     }
+    #main .card { border: 1px solid var(--border); }
 
-    .fade-in         { opacity: 1; transform: none; }
-    .skill-tag       { opacity: 1; transform: none; animation: none; }
-    .hero-avatar, .hero-badge, #hero-name, .hero-title, .hero-tagline, .hero-links {
-        animation: none; opacity: 1; transform: none;
+    .card-title { break-after: avoid; margin-bottom: 0.7rem; }
+
+    /* Don't split individual entries across pages */
+    .timeline-item,
+    .project-card,
+    .edu-item,
+    .skill-group { page-break-inside: avoid; break-inside: avoid; }
+
+    .timeline-item { margin-bottom: 1rem; }
+    .projects-grid { grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+    .project-card:hover { transform: none; box-shadow: none; }
+
+    /* Kill all entrance animations / hidden states so nothing is missing */
+    .fade-in, .skill-tag, .hero-badge, #hero-name,
+    .hero-title, .hero-tagline, .hero-links, .stat-item {
+        opacity: 1 !important;
+        transform: none !important;
+        animation: none !important;
     }
-    #hero { animation: none; background-size: auto; }
-    #hero::before, #hero::after { display: none; }
 }
 
 /* ===== Responsive ===== */
