@@ -117,7 +117,7 @@ svg { stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; 
 }
 .emblem-icon { width: 44px; height: 44px; color: var(--lime); }
 .brand-name { font-size: 1.45rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: #fff; }
-.brand-tag  { font-size: 0.66rem; font-weight: 600; letter-spacing: 0.34em; text-transform: uppercase; color: var(--lime); margin-top: 4px; }
+.brand-tag  { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.3em; text-transform: uppercase; color: var(--lime); margin-top: 12px; }
 
 .side-block { margin-bottom: 26px; }
 .side-block:last-child { margin-bottom: 0; }
